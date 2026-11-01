@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#c62828">
+
+<title>SOS Көмек</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>🆘 SOS Көмек</h1>
+  <div class="tools">
+    <button id="btnTheme" aria-label="Түнгі режим">🌙</button>
+    <button id="btnFont" aria-label="Қаріпті үлкейту">A+</button>
+  </div>
+</header>
+
+<main>
+  <!-- БАСТЫ -->
+  <section id="s-home" class="screen active">
+    <div class="sos-wrap">
+      <button class="sos" id="btnSOS">SOS<small>басыңыз</small></button>
+    </div>
+    <p class="muted" style="text-align:center;margin-top:-4px">Басқанда: 1) 112-ге қоңырау, 2) орныңыз жақындарға жіберіледі.</p>
+
+    <div class="card" id="panelSOS" style="display:none">
+      <h2>🚨 Көмек шақыру</h2>
+      <a class="btn red" href="tel:112">📞 112-ге қоңырау шалу</a>
+      <div id="locStatus" class="muted" style="margin-top:10px">📍 Орын анықталуда…</div>
+      <div id="sendBox"></div>
+      <button class="btn gray" id="btnCopyLoc">📋 Орынды көшіру</button>
+      <p class="muted">Қоңырау шалғанда айтыңыз: не болды, қанша адам зардап шекті, мекенжай немесе бағдар.</p>
+    </div>
+
+    <h2 style="font-size:1.05rem">Төтенше нөмірлер</h2>
+    <div class="grid">
+      <a class="num" href="tel:112"><b>112</b><span>Бірыңғай құтқару</span></a>
+      <a class="num" href="tel:103"><b>103</b><span>Жедел жәрдем</span></a>
+      <a class="num" href="tel:101"><b>101</b><span>Өрт сөндіру</span></a>
+      <a class="num" href="tel:102"><b>102</b><span>Полиция</span></a>
+    </div>
+    <p class="warn">Бұл қосымша дәрігерді алмастырмайды. Қауіпті жағдайда әрқашан алдымен 112/103-ке қоңырау шалыңыз.</p>
+  </section>
+
+  <!-- НҰСҚАУЛЫҚ ТІЗІМІ -->
+  <section id="s-guides" class="screen">
+    <input type="search" id="q" placeholder="🔍 Іздеу: жану, қан кету, тұншығу…">
+    <div class="chips" id="chips"></div>
+    <div id="list"></div>
+  </section>
+
+  <!-- НҰСҚАУЛЫҚ ТОЛЫҚ -->
+  <section id="s-detail" class="screen">
+    <button class="back" id="btnBack">← Артқа</button>
+    <div id="detail"></div>
+  </section>
+
+  <!-- CPR -->
+  <section id="s-cpr" class="screen">
+    <div class="card metro">
+      <h2>❤️ Жүрекке массаж ырғағы</h2>
+      <p class="muted">Кеуденің ортасын қатты әрі жылдам басыңыз: минутына 100–120 рет. Дыбыс пен діріл ырғақ береді.</p>
+      <div class="beat" id="beat"></div>
+      <div style="font-size:1.4rem;font-weight:700"><span id="bpm">110</span> /мин</div>
+      <input type="range" id="bpmRange" min="100" max="120" value="110" style="width:80%">
+      <button class="btn red" id="btnMetro">▶ Бастау</button>
+      <a class="btn gray" href="tel:112">📞 Алдымен 112-ге қоңырау шалыңыз</a>
+    </div>
+    <div class="card">
+      <h2>Қысқаша қадамдар (ересек)</h2>
+      <ol>
+        <li>Қауіпсіздігіңізді тексеріңіз. Адамды қатты шақырып, иығынан сілкіңіз.</li>
+        <li>Жауап жоқ, тыныс жоқ немесе әдеттегідей емес болса, 112-ге қоңырау шалыңыз (спикерфонмен).</li>
+        <li>Адамды қатты тегіс жерге шалқасынан жатқызыңыз.</li>
+        <li>Алақаныңызды кеуде сүйегінің ортасына қойып, қолды түзу ұстап, шамамен 5–6 см тереңдікке басыңыз.</li>
+        <li>Әр басудан кейін кеуде толық көтерілсін. Жедел жәрдем келгенше немесе адам өзі тыныс алғанша тоқтамаңыз.</li>
+        <li>Жақын жерде дефибриллятор (AED) болса, әкелуді сұраңыз және аппараттың дауыстық нұсқауын орындаңыз.</li>
+      </ol>
+      <p class="muted">Қолдан тыныс беруді үйренбеген болсаңыз, тек кеудеге массаж жасаңыз.</p>
+    </div>
+  </section>
+
+  <!-- ЖАҚЫНДАР -->
+  <section id="s-contacts" class="screen">
+    <div class="card">
+      <h2>👨‍👩‍👧 Сенімді адамдар</h2>
+      <p class="muted">SOS басылғанда орныңыз осы адамдарға жіберуге дайын болады. Деректер тек осы телефонда сақталады.</p>
+      <div id="contactList"></div>
+      <input type="text" id="cName" placeholder="Аты (мысалы: Анам)">
+      <input type="tel" id="cPhone" placeholder="+7 7XX XXX XX XX">
+      <button class="btn green" id="btnAddContact">➕ Қосу</button>
+    </div>
+    <div class="card">
+      <h2>🩺 Медициналық карта</h2>
+      <p class="muted">Қан тобы, аллергия, тұрақты дәрілер. Көмекшілерге көрсету үшін. Тек осы телефонда сақталады.</p>
+      <input type="text" id="mBlood" placeholder="Қан тобы (мысалы: A(II) Rh+)">
+      <input type="text" id="mAllergy" placeholder="Аллергия">
+      <input type="text" id="mMeds" placeholder="Тұрақты қабылдайтын дәрілер">
+      <button class="btn green" id="btnSaveMed">💾 Сақтау</button>
+    </div>
+    <div class="card">
+      <h2>📲 Басқаларға бөлісу</h2>
+      <p class="muted">Қосымша тегін. Сілтемені достарыңызға жіберіңіз.</p>
+      <button class="btn" id="btnShare">Сілтемені бөлісу</button>
+    </div>
+  </section>
+</main>
+
+<nav>
+  <button data-go="home" class="active"><span class="i">🆘</span>SOS</button>
+  <button data-go="guides"><span class="i">📖</span>Нұсқаулық</button>
+  <button data-go="cpr"><span class="i">❤️</span>CPR</button>
+  <button data-go="contacts"><span class="i">👤</span>Менің</button>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
+:root{
+--bg:#f6f7f9; --card:#fff; --text:#1b1f24; --muted:#5b6670; --line:#e3e6ea;
+--red:#c62828; --red2:#e53935; --amber:#f9a825; --green:#2e7d32; --blue:#1565c0;
+--fs:16px;
+}
+:root[data-theme="dark"]{
+--bg:#0f1317; --card:#1a2027; --text:#eef1f4; --muted:#9aa6b2; --line:#2a323b;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{font-size:16px;font-size:var(--fs)}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:#f6f7f9;background:var(--bg);color:#1b1f24;color:var(--text);line-height:1.5;padding-bottom:84px}
+header{background:#c62828;background:var(--red);color:#fff;padding:14px 16px;padding-top:calc(14px + env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}
+header h1{font-size:1.15rem;margin:0}
+header .tools button{background:rgba(255,255,255,.18);color:#fff;border:0;border-radius:10px;padding:8px 10px;font-size:1rem;margin-left:6px}
+main{max-width:640px;margin:0 auto;padding:16px}
+.screen{display:none}.screen.active{display:block}
+nav{position:fixed;bottom:0;left:0;right:0;background:#fff;background:var(--card);border-top:1px solid #e3e6ea;border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom);z-index:5}
+nav button{flex:1;background:none;border:0;padding:10px 4px;color:#5b6670;color:var(--muted);font-size:.78rem}
+nav button .i{display:block;font-size:1.35rem}
+nav button.active{color:#c62828;color:var(--red);font-weight:700}
+.sos-wrap{text-align:center;margin:10px 0 18px}
+.sos{width:210px;height:210px;border-radius:50%;border:0;background:radial-gradient(circle at 35% 30%,#e53935,#c62828);background:radial-gradient(circle at 35% 30%,var(--red2),var(--red));color:#fff;font-size:3rem;font-weight:800;letter-spacing:2px;box-shadow:0 0 0 10px rgba(198,40,40,.15),0 10px 30px rgba(198,40,40,.4);animation:pulse 2s infinite}
+.sos small{display:block;font-size:.8rem;font-weight:500;letter-spacing:0;margin-top:4px;opacity:.9}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 10px rgba(198,40,40,.15),0 10px 30px rgba(198,40,40,.4)}50%{box-shadow:0 0 0 22px rgba(198,40,40,.06),0 10px 30px rgba(198,40,40,.4)}}
+.card{background:#fff;background:var(--card);border:1px solid #e3e6ea;border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}
+.card h2{margin:0 0 8px;font-size:1.05rem}
+.btn{display:block;width:100%;text-align:center;text-decoration:none;border:0;border-radius:12px;padding:13px;font-size:1rem;font-weight:600;margin-top:8px;color:#fff;background:#1565c0;background:var(--blue)}
+.btn.red{background:#c62828;background:var(--red)}.btn.green{background:#2e7d32;background:var(--green)}.btn.gray{background:#5b6670;background:var(--muted)}
+.grid{display:flex;flex-wrap:wrap;margin:-4px}.grid>.num{width:calc(50% - 8px);margin:4px}
+.num{display:block;text-decoration:none;color:#1b1f24;color:var(--text);background:#fff;background:var(--card);border:1px solid #e3e6ea;border:1px solid var(--line);border-radius:14px;padding:12px;text-align:center}
+.num b{display:block;font-size:1.6rem;color:#c62828;color:var(--red)}
+.num span{font-size:.82rem;color:#5b6670;color:var(--muted)}
+.muted{color:#5b6670;color:var(--muted);font-size:.88rem}
+input[type=text],input[type=tel],input[type=search]{width:100%;padding:12px;border:1px solid #e3e6ea;border:1px solid var(--line);border-radius:12px;background:#fff;background:var(--card);color:#1b1f24;color:var(--text);font-size:1rem;margin-top:6px}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:4px 0 10px}
+.chip{flex:none;border:1px solid #e3e6ea;border:1px solid var(--line);background:#fff;background:var(--card);color:#1b1f24;color:var(--text);border-radius:999px;padding:7px 13px;font-size:.88rem}
+.chip.on{background:#1b1f24;background:var(--text);color:#f6f7f9;color:var(--bg)}
+.item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:#fff;background:var(--card);border:1px solid #e3e6ea;border:1px solid var(--line);border-radius:14px;padding:13px;margin-bottom:8px;color:#1b1f24;color:var(--text);font-size:1rem}
+.item .e{font-size:1.6rem}
+.item .t{flex:1;font-weight:600}
+.tag{font-size:.7rem;border-radius:999px;padding:3px 8px;color:#fff}
+.u-r{background:#c62828;background:var(--red)}.u-y{background:#b8860b}.u-g{background:#2e7d32;background:var(--green)}
+.back{background:none;border:0;color:#1565c0;color:var(--blue);font-size:1rem;padding:6px 0;margin-bottom:6px}
+.sec{border-left:5px solid #e3e6ea;border-left:5px solid var(--line);padding:2px 0 2px 12px;margin:14px 0}
+.sec h3{margin:0 0 4px;font-size:1rem}
+.sec ol,.sec ul{margin:4px 0;padding-left:20px}
+.sec li{margin:5px 0}
+.sec.do{border-color:#2e7d32;border-color:var(--green)}.sec.dont{border-color:#c62828;border-color:var(--red)}.sec.call{border-color:#f9a825;border-color:var(--amber)}.sec.sym{border-color:#1565c0;border-color:var(--blue)}
+.warn{font-size:.82rem;color:#5b6670;color:var(--muted);text-align:center;margin:18px 0}
+.metro{text-align:center}
+.beat{width:90px;height:90px;border-radius:50%;background:#c62828;background:var(--red);margin:12px auto;transition:transform .08s}
+.beat.on{transform:scale(1.25)}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#222;color:#fff;padding:10px 16px;border-radius:12px;font-size:.9rem;display:none;z-index:9;max-width:90%}
+.contact{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #e3e6ea;border-bottom:1px solid var(--line)}
+.contact button{background:none;border:0;color:#c62828;color:var(--red);font-size:1.1rem}
+.item .e{margin-right:12px}.chip{margin-right:6px}.item .tag{margin-left:8px}
+/* ============ НҰСҚАУЛЫҚ ДЕРЕКТЕРІ ============
+   Жаңа жағдай қосу үшін төмендегі тізімге осындай блок қосыңыз.
+   u: 'r' = шұғыл (қызыл), 'y' = маңызды (сары), 'g' = жеңіл (жасыл) */
+var GUIDES = [
+ {id:'cpr',e:'❤️',t:'Жүрек тоқтауы (CPR)',u:'r',
+  sym:['Адам жауап бермейді','Тыныс алмайды немесе қырылдап, әдеттегідей емес тыныс алады'],
+  do:['112-ге қоңырау шалыңыз (спикерфон).','Қатты тегіс жерге шалқасынан жатқызыңыз.','Кеуде ортасына минутына 100–120 рет, шамамен 5–6 см тереңдікке басыңыз ("CPR" бөлімінде ырғақ бар).','AED болса, қолданыңыз.','Жедел жәрдем келгенше тоқтамаңыз.'],
+  dont:['Басуды артық ұзақ тоқтатпаңыз.','Қолдан тыныс беруді білмесеңіз, тек массаж жасаңыз.'],
+  call:['Әрқашан 112/103.']},
+ {id:'bleed',e:'🩸',t:'Қатты қан кету',u:'r',
+  sym:['Қан ағып тоқтамайды','Киім қанға малынған','Бозару, бас айналу'],
+  do:['112/103-ке қоңырау шалыңыз.','Таза мата, байлам немесе киіммен жараны тікелей және қатты басыңыз.','Мата қанға малынса, алмай, үстінен тағы мата қойып басуды жалғастырыңыз.','Мүмкін болса, жарақаттанған аяқ-қолды жүрек деңгейінен жоғары көтеріңіз.','Адамды жатқызып, жылы ұстаңыз.','Аяқ-қолдан өмірге қауіпті қан кетуде басу көмектеспесе, жгут салып, уақытын жазыңыз.'],
+  dont:['Жарадағы терең кірген затты суырмаңыз.','Малынған матаны алып тастамаңыз.','Жараны спиртпен немесе йодпен тікелей құймаңыз.'],
+  call:['Қан тоқтамаса немесе көп болса: дереу 112/103.']},
+ {id:'burn',e:'🔥',t:'Күйік',u:'y',
+  sym:['Терінің қызаруы, ісінуі, күлбіреуі','Қатты ауыру'],
+  do:['Күйген жерді ағын салқын (мұздай емес) сумен 20 минутқа дейін салқындатыңыз.','Сақина, білезік, тар киімді ісінбей тұрып алыңыз (тері жабыспаған болса).','Таза, жұмсақ матамен немесе жабысқақ пленкамен бос жабыңыз.'],
+  dont:['Мұз, май, сары май, қаймақ, жұмыртқа жақпаңыз.','Күлбіреген көпіршікті жарып жібермеңіз.','Терімен жабысып қалған киімді жұлмаңыз.'],
+  call:['Күйік алақаннан үлкен болса, бетте, қолда, аяқта, жыныс мүшелерінде, буындарда немесе терең болса.','Химиялық немесе электр күйігі.','Бала немесе қарт адам болса.']},
+ {id:'choke',e:'😮‍💨',t:'Тұншығу (тыныс жолына зат кету)',u:'r',
+  sym:['Сөйлей, жөтеле алмайды','Мойнын қыса береді','Беті көгереді'],
+  do:['Адам күшті жөтеліп жатса, жөтелуге мүмкіндік беріңіз.','Жөтеле алмаса: артынан тұрып, жауырындар арасына алақанмен 5 рет соғыңыз.','Көмектеспесе: артынан құшақтап, жұдырықты кіндік пен кеуде сүйегінің арасына қойып, ішке және жоғары қарай 5 рет қатты басыңыз.','5 соққы мен 5 басуды алма-кезек қайталаңыз.','Адам есінен танса, жатқызып, CPR бастаңыз және 112-ге қоңырау шалыңыз.'],
+  dont:['Саусақпен көрінбейтін затты соқыр түрде алуға әрекет етпеңіз.','Суды күштеп ішкізбеңіз.'],
+  call:['Зат шықпаса немесе адам есінен танса: дереу 112.','Нәресте үшін әдіс басқа: дереу 112-ге қоңырау шалып, нұсқау сұраңыз.']},
+ {id:'stroke',e:'🧠',t:'Инсульт',u:'r',
+  sym:['Беті қисаю (бір жағы түсіп қалады)','Бір қолы көтерілмейді немесе әлсірейді','Сөйлеу бұзылады, түсініксіз сөйлейді','Кенет қатты бас ауыруы, көру немесе тепе-теңдік бұзылуы'],
+  do:['Дереу 112/103-ке қоңырау шалыңыз.','Белгілер басталған уақытты есте сақтап, дәрігерге айтыңыз.','Адамды жайлы жағдайда отырғызыңыз немесе жатқызыңыз, басын сәл көтеріңіз.','Қысып тұрған киімді босатыңыз, жанында болыңыз.'],
+  dont:['Ештеңе жегізбеңіз, ішкізбеңіз.','Өздігінен дәрі, аспирин бермеңіз.','"Өтіп кетеді" деп күтпеңіз.'],
+  call:['Әрқашан дереу 112/103. Әр минут маңызды.']},
+ {id:'seizure',e:'⚡',t:'Талма (құрысу)',u:'y',
+  sym:['Кенет құлау, бүкіл дене құрысады','Есін жоғалту'],
+  do:['Уақытты белгілеңіз.','Айналадағы қауіпті заттарды алыңыз, басының астына жұмсақ зат қойыңыз.','Құрысу бітісімен адамды бір жанына (қауіпсіз қалыпқа) аударыңыз.','Адам есін жиғанша жанында болыңыз, сабырмен сөйлесіңіз.'],
+  dont:['Адамды қозғалтып, ұстамаңыз.','Аузына ештеңе (қасық, саусақ) салмаңыз.','Есін жиғанша су, тамақ бермеңіз.'],
+  call:['Құрысу 5 минуттан ұзақ.','Алғаш рет болса, қайталанса, жарақат алса немесе жүкті әйел/диабетті адам болса.','Тыныс алу қалпына келмесе.']},
+ {id:'faint',e:'😵',t:'Есінен тану',u:'y',
+  sym:['Бас айналу, көз қараңғылану','Бозару, суық тер','Қысқа уақыт есінен тану'],
+  do:['Адамды жатқызып, аяғын 20–30 см көтеріңіз.','Қысып тұрған киімін босатыңыз, таза ауа берігіз.','Тыныс алуын тексеріңіз.','Есін жиған соң баяу отырғызыңыз.'],
+  dont:['Бірден тұрғызбаңыз.','Есі кірмей жатып су ішкізбеңіз.'],
+  call:['1 минуттан ұзақ есі кірмесе.','Тыныс алмаса (CPR), кеудесі ауырса, жарақат алса, жүкті болса немесе қайталанса.']},
+ {id:'nose',e:'👃',t:'Мұрыннан қан кету',u:'g',
+  sym:['Мұрыннан қан ағады'],
+  do:['Отырғызып, басын алға еңкейтіңіз.','Мұрынның жұмсақ бөлігін 10 минут тоқтамай қысып ұстаңыз.','Мұрын сүйегіне салқын компресс қоюға болады.','Қан аққан соң, 1–2 сағат мұрынды сүртпеңіз.'],
+  dont:['Басты артқа шалқайтпаңыз (қан тамаққа кетеді).','Мұрынға мақта тығып, ішке итермеңіз.'],
+  call:['20 минуттан кейін де тоқтамаса.','Басқа соққыдан кейін болса.','Қан көп кетіп, бас айналса.']},
+ {id:'poison',e:'☠️',t:'Улану',u:'r',
+  sym:['Жүрек айну, құсу, іш ауыруы','Бас айналу, ұйқышылдық, есінен тану','Аузындағы күйік, ерекше иіс'],
+  do:['112/103-ке қоңырау шалыңыз.','Не, қанша және қашан ішкенін анықтаңыз, қаптамасын сақтаңыз.','Газ немесе түтіннен болса, адамды таза ауаға шығарыңыз (өзіңізді қауіпке тікпей).','Дәрігер нұсқауын күтіңіз.'],
+  dont:['Күштеп құстырмаңыз.','Қышқыл, сілті немесе керосиннен кейін ештеңе ішкізбеңіз (дәрігер айтпаса).','Есі жоқ адамға ештеңе ішкізбеңіз.'],
+  call:['Әрқашан 112/103.']},
+ {id:'shock',e:'🔌',t:'Электр тоғы соғуы',u:'r',
+  sym:['Тоғ соққан соң есінен тану','Күйік, жүрек соғысының бұзылуы'],
+  do:['Алдымен тоқты өшіріңіз (штепсель, автомат).','Өшіре алмасаңыз, құрғақ ағаш немесе пластик затпен адамды көзден ажыратыңыз.','112/103-ке қоңырау шалыңыз.','Тыныс алмаса, CPR бастаңыз.','Күйген жерді таза матамен жабыңыз.'],
+  dont:['Тоқ өшпей тұрып адамға қол тигізбеңіз.','Жоғары кернеу сымына жақындамаңыз, 112-ге қоңырау шалып күтіңіз.'],
+  call:['Тоқ соққан әрбір жағдайда, өздігінен жақсы сезінгенде де, дәрігерге көрінген жөн.']},
+ {id:'heat',e:'🌡️',t:'Күн өту (қызып кету)',u:'y',
+  sym:['Қатты бас ауыруы, бас айналу','Тері қызу, құрғақ немесе тершең','Жүрек айну, шатасу'],
+  do:['Көлеңкеге немесе салқын бөлмеге шығарыңыз.','Артық киімін шешіңіз.','Денені салқын сумен сулап, желпіңіз; мойын, қолтық, шап аймағына салқын компресс қойыңыз.','Есі бар болса, аздап салқын су ішкізіңіз.'],
+  dont:['Мұздай суға батырмаңыз.','Есі жоқ адамға ішкізбеңіз.'],
+  call:['Шатасу, есінен тану, дене қызуы өте жоғары болса: 112/103.']},
+ {id:'fracture',e:'🦴',t:'Сүйек сыну / шығу',u:'y',
+  sym:['Қатты ауыру, ісіну','Аяқ-қол пішіні өзгерген','Қозғалта алмау'],
+  do:['Жарақат алған жерді қозғалтпай бекітіңіз (таяқша, қатты зат + мата).','Салқын компресс қойыңыз (матаға орап).','Ашық жара болса, таза матамен жауып, қанды тоқтатыңыз.','Мойын мен омыртқа жарақаты күдігі болса, адамды қозғалтпаңыз.'],
+  dont:['Сүйекті орнына салуға әрекет етпеңіз.','Ауырсынумен жүргізбеңіз.','Омыртқа жарақатында адамды көтермеңіз.'],
+  call:['Ашық сынық, қатты қан кету, мойын/омыртқа/бас жарақаты, ірі сүйек (сан) сынуы: 112/103.']},
+ {id:'asthma',e:'🫁',t:'Демікпе / аллергиялық реакция',u:'r',
+  sym:['Ентігу, ысқырықты тыныс','Бет, ерін, тілдің ісінуі','Тәннің қышуы, қызаруы'],
+  do:['Адамды отырғызып, тыныштандырыңыз.','Өзінде ингалятор немесе дәрі (эпинефрин қаламы) болса, көмектесіп қолдандырыңыз.','Ентігу күшейсе, бет-ерін ісінсе, 112/103-ке дереу қоңырау шалыңыз.','Тыныс алмаса, CPR бастаңыз.'],
+  dont:['Адамды жатқызбаңыз (ентіккенде).','Белгілі аллергенмен байланысын жалғастырмаңыз.'],
+  call:['Тыныс жолының ісінуі, тыныс тарылуы, есінен тану: дереу 112.']}
+];
+/* ===== Ескі браузерлерге арналған қосымшалар (polyfill) ===== */
+if (!Array.prototype.find) {
+  Array.prototype.find = function (f) {
+    for (var i = 0; i < this.length; i++) { if (f(this[i], i, this)) return this[i]; }
+    return undefined;
+  };
+}
+if (!String.prototype.includes) {
+  String.prototype.includes = function (s, p) { return this.indexOf(s, p || 0) !== -1; };
+}
+
+var URG = {r: {t: 'Шұғыл', c: 'u-r'}, y: {t: 'Маңызды', c: 'u-y'}, g: {t: 'Жеңіл', c: 'u-g'}};
+function $(s) { return document.querySelector(s); }
+function $$(s) { return Array.prototype.slice.call(document.querySelectorAll(s)); }
+var store = {
+  get: function (k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+var toastTimer = null;
+function toast(m) {
+  var t = $('#toast'); t.textContent = m; t.style.display = 'block';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () { t.style.display = 'none'; }, 2600);
+}
+var ESCMAP = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'};
+function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return ESCMAP[c]; }); }
+
+/* ===== Навигация ===== */
+function go(name) {
+  $$('.screen').forEach(function (s) { s.classList.remove('active'); });
+  $('#s-' + name).classList.add('active');
+  $$('nav button').forEach(function (b) {
+    var on = b.getAttribute('data-go') === name || (name === 'detail' && b.getAttribute('data-go') === 'guides');
+    if (on) { b.classList.add('active'); } else { b.classList.remove('active'); }
+  });
+  window.scrollTo(0, 0);
+  if (name !== 'cpr') stopMetro();
+  if ('speechSynthesis' in window) speechSynthesis.cancel();
+}
+$$('nav button').forEach(function (b) { b.onclick = function () { go(b.getAttribute('data-go')); }; });
+$('#btnBack').onclick = function () { go('guides'); };
+
+/* ===== Тақырып / қаріп ===== */
+var root = document.documentElement;
+function applyPrefs() {
+  root.setAttribute('data-theme', store.get('theme', 'light'));
+  root.style.fontSize = store.get('fs', 16) + 'px';
+}
+$('#btnTheme').onclick = function () { store.set('theme', store.get('theme', 'light') === 'dark' ? 'light' : 'dark'); applyPrefs(); };
+$('#btnFont').onclick = function () { var f = store.get('fs', 16); store.set('fs', f >= 22 ? 16 : f + 3); applyPrefs(); };
+applyPrefs();
+
+/* ===== Нұсқаулық тізімі ===== */
+var filter = 'all';
+function renderChips() {
+  var opts = [['all', 'Барлығы'], ['r', '🔴 Шұғыл'], ['y', '🟡 Маңызды'], ['g', '🟢 Жеңіл']];
+  $('#chips').innerHTML = opts.map(function (o) {
+    return '<button class="chip' + (filter === o[0] ? ' on' : '') + '" data-f="' + o[0] + '">' + o[1] + '</button>';
+  }).join('');
+  $$('#chips .chip').forEach(function (c) {
+    c.onclick = function () { filter = c.getAttribute('data-f'); renderChips(); renderList(); };
+  });
+}
+function renderList() {
+  var q = $('#q').value.replace(/^\s+|\s+$/g, '').toLowerCase();
+  var items = GUIDES.filter(function (g) {
+    return (filter === 'all' || g.u === filter) &&
+      (!q || g.t.toLowerCase().indexOf(q) !== -1 || g.sym.join(' ').toLowerCase().indexOf(q) !== -1);
+  });
+  $('#list').innerHTML = items.length ? items.map(function (g) {
+    return '<button class="item" data-id="' + g.id + '"><span class="e">' + g.e + '</span><span class="t">' +
+      esc(g.t) + '</span><span class="tag ' + URG[g.u].c + '">' + URG[g.u].t + '</span></button>';
+  }).join('') : '<p class="muted">Ештеңе табылмады.</p>';
+  $$('#list .item').forEach(function (b) { b.onclick = function () { openGuide(b.getAttribute('data-id')); }; });
+}
+$('#q').oninput = renderList;
+
+function sec(cls, title, arr, ordered) {
+  if (!arr || !arr.length) return '';
+  var tag = ordered ? 'ol' : 'ul';
+  return '<div class="sec ' + cls + '"><h3>' + title + '</h3><' + tag + '>' +
+    arr.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</' + tag + '></div>';
+}
+var currentGuide = null;
+function openGuide(id) {
+  var g = GUIDES.find(function (x) { return x.id === id; });
+  currentGuide = g;
+  $('#detail').innerHTML =
+    '<h2 style="margin:0 0 4px">' + g.e + ' ' + esc(g.t) + ' <span class="tag ' + URG[g.u].c + '">' + URG[g.u].t + '</span></h2>' +
+    '<a class="btn red" href="tel:112">📞 112-ге қоңырау шалу</a>' +
+    '<button class="btn gray" id="btnSpeak">🔊 Дауыстап оқу</button>' +
+    sec('sym', 'Белгілері', g.sym, false) +
+    sec('do', 'Не істеу керек', g['do'], true) +
+    sec('dont', 'Не істеуге болмайды', g.dont, false) +
+    sec('call', 'Қашан 112/103-ке қоңырау шалу керек', g.call, false) +
+    '<p class="warn">Ақпарат жалпы мақсатта берілген және дәрігер көмегін алмастырмайды.</p>';
+  $('#btnSpeak').onclick = speakGuide;
+  go('detail');
+}
+function speakGuide() {
+  if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') {
+    toast('Бұл құрылғы дауыспен оқуды қолдамайды'); return;
+  }
+  if (speechSynthesis.speaking) { speechSynthesis.cancel(); return; }
+  var g = currentGuide;
+  var text = g.t + '. Не істеу керек. ' + g['do'].map(function (x, i) { return (i + 1) + '. ' + x; }).join(' ') +
+    ' Не істеуге болмайды. ' + (g.dont || []).join(' ');
+  var u = new SpeechSynthesisUtterance(text);
+  var voices = speechSynthesis.getVoices();
+  var v = voices.find(function (v) { return /^kk/i.test(v.lang); }) || voices.find(function (v) { return /^ru/i.test(v.lang); });
+  if (v) { u.voice = v; u.lang = v.lang; } else { u.lang = 'kk-KZ'; }
+  if (!voices.some(function (v) { return /^kk/i.test(v.lang); })) toast('Қазақша дауыс табылмады, ең жақын дауыс қолданылады');
+  speechSynthesis.speak(u);
+}
+
+/* ===== Орын және SOS ===== */
+var lastLoc = null;
+function locText() {
+  if (!lastLoc) return 'Көмек керек! Орнымды анықтай алмадым.';
+  var c = lastLoc.coords;
+  var link = 'https://maps.google.com/?q=' + c.latitude.toFixed(6) + ',' + c.longitude.toFixed(6);
+  var med = store.get('med', {});
+  var parts = [];
+  if (med.blood) parts.push('Қан тобы: ' + med.blood);
+  if (med.allergy) parts.push('Аллергия: ' + med.allergy);
+  var extra = parts.join('. ');
+  return '🆘 Көмек керек! Менің орным: ' + link + ' (дәлдігі шамамен ' + Math.round(c.accuracy) + ' м).' + (extra ? ' ' + extra + '.' : '');
+}
+function buildSendButtons() {
+  var cs = store.get('contacts', []);
+  var msg = encodeURIComponent(locText());
+  if (!cs.length) {
+    $('#sendBox').innerHTML = '<p class="muted">Жақындарға жіберу үшін «Менің» бөлімінде сенімді адамдарды қосыңыз.</p>' +
+      '<a class="btn green" href="sms:?&body=' + msg + '">💬 SMS арқылы жіберу</a>';
+    return;
+  }
+  $('#sendBox').innerHTML = cs.map(function (c) {
+    var ph = c.phone.replace(/[^\d+]/g, '');
+    var wa = ph.replace(/\D/g, '');
+    return '<a class="btn green" href="sms:' + ph + '?&body=' + msg + '">💬 ' + esc(c.name) + ': SMS</a>' +
+      '<a class="btn" style="background:#128c7e" href="https://wa.me/' + wa + '?text=' + msg + '" target="_blank" rel="noopener">WhatsApp: ' + esc(c.name) + '</a>';
+  }).join('');
+}
+function getLocation() {
+  $('#locStatus').textContent = '📍 Орын анықталуда…';
+  if (!navigator.geolocation) {
+    $('#locStatus').textContent = '⚠️ Бұл құрылғы орынды анықтамайды. Мекенжайды дауыспен айтыңыз.';
+    buildSendButtons(); return;
+  }
+  navigator.geolocation.getCurrentPosition(function (pos) {
+    lastLoc = pos;
+    var la = pos.coords.latitude, lo = pos.coords.longitude, ac = pos.coords.accuracy;
+    $('#locStatus').innerHTML = '📍 Орныңыз анықталды (дәлдігі ~' + Math.round(ac) + ' м)<br><a href="https://maps.google.com/?q=' + la + ',' + lo + '" target="_blank" rel="noopener">Картада көру</a>';
+    buildSendButtons();
+  }, function (err) {
+    var m = err.code === 1 ? 'Орынға рұқсат берілмеді. Браузер баптауынан рұқсат беріңіз.' : 'Орын анықталмады.';
+    $('#locStatus').textContent = '⚠️ ' + m + ' Мекенжайды дауыспен айтыңыз.';
+    buildSendButtons();
+  }, {enableHighAccuracy: true, timeout: 12000, maximumAge: 0});
+}
+$('#btnSOS').onclick = function () {
+  if (navigator.vibrate) navigator.vibrate(200);
+  var p = $('#panelSOS');
+  p.style.display = 'block';
+  try { p.scrollIntoView({behavior: 'smooth'}); } catch (e) { p.scrollIntoView(); }
+  getLocation();
+};
+function copyText(text, done, fail) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, fail);
+    return;
+  }
+  try {
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    var ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    if (ok) { done(); } else { fail(); }
+  } catch (e) { fail(); }
+}
+$('#btnCopyLoc').onclick = function () {
+  copyText(locText(), function () { toast('Көшірілді'); }, function () { toast('Көшіру мүмкін болмады'); });
+};
+
+/* ===== Жақындар және мед.карта ===== */
+function renderContacts() {
+  var cs = store.get('contacts', []);
+  $('#contactList').innerHTML = cs.length ? cs.map(function (c, i) {
+    return '<div class="contact"><span><b>' + esc(c.name) + '</b><br><span class="muted">' + esc(c.phone) + '</span></span><button data-i="' + i + '" aria-label="Өшіру">🗑</button></div>';
+  }).join('') : '<p class="muted">Әлі ешкім қосылмаған.</p>';
+  $$('#contactList button').forEach(function (b) {
+    b.onclick = function () {
+      var a = store.get('contacts', []);
+      a.splice(parseInt(b.getAttribute('data-i'), 10), 1);
+      store.set('contacts', a); renderContacts();
+    };
+  });
+}
+$('#btnAddContact').onclick = function () {
+  var name = $('#cName').value.replace(/^\s+|\s+$/g, ''), phone = $('#cPhone').value.replace(/^\s+|\s+$/g, '');
+  if (!name || phone.replace(/\D/g, '').length < 10) { toast('Атын және толық нөмірді енгізіңіз'); return; }
+  var a = store.get('contacts', []);
+  if (a.length >= 5) { toast('Ең көбі 5 адам'); return; }
+  a.push({name: name, phone: phone}); store.set('contacts', a);
+  $('#cName').value = ''; $('#cPhone').value = ''; renderContacts(); toast('Қосылды');
+};
+function loadMed() {
+  var m = store.get('med', {});
+  $('#mBlood').value = m.blood || ''; $('#mAllergy').value = m.allergy || ''; $('#mMeds').value = m.meds || '';
+}
+function trim(s) { return s.replace(/^\s+|\s+$/g, ''); }
+$('#btnSaveMed').onclick = function () {
+  store.set('med', {blood: trim($('#mBlood').value), allergy: trim($('#mAllergy').value), meds: trim($('#mMeds').value)});
+  toast('Сақталды');
+};
+$('#btnShare').onclick = function () {
+  if (navigator.share) {
+    try { navigator.share({title: 'SOS Көмек', text: 'Қазақша алғашқы көмек және SOS қосымшасы (тегін)', url: location.href}); } catch (e) {}
+  } else {
+    copyText(location.href, function () { toast('Сілтеме көшірілді'); }, function () { toast(location.href); });
+  }
+};
+
+/* ===== CPR метроном ===== */
+var metroTimer = null, actx = null;
+function beep() {
+  try {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    actx = actx || new AC();
+    var o = actx.createOscillator(), g = actx.createGain();
+    o.frequency.value = 880; g.gain.value = 0.25; o.connect(g); g.connect(actx.destination);
+    o.start(0); o.stop(actx.currentTime + 0.06);
+  } catch (e) {}
+}
+function tick() {
+  beep(); if (navigator.vibrate) navigator.vibrate(40);
+  var b = $('#beat'); b.classList.add('on');
+  setTimeout(function () { b.classList.remove('on'); }, 90);
+}
+function startMetro() {
+  var bpm = parseInt($('#bpmRange').value, 10);
+  tick(); metroTimer = setInterval(tick, 60000 / bpm);
+  $('#btnMetro').textContent = '⏹ Тоқтату';
+}
+function stopMetro() {
+  if (metroTimer) { clearInterval(metroTimer); metroTimer = null; }
+  var b = $('#btnMetro'); if (b) b.textContent = '▶ Бастау';
+}
+$('#btnMetro').onclick = function () { if (metroTimer) { stopMetro(); } else { startMetro(); } };
+$('#bpmRange').oninput = function (e) {
+  $('#bpm').textContent = this.value;
+  if (metroTimer) { stopMetro(); startMetro(); }
+};
+
+/* ===== Іске қосу ===== */
+renderChips(); renderList(); renderContacts(); loadMed();
