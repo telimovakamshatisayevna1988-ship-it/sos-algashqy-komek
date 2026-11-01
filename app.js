@@ -105,11 +105,15 @@ function speakGuide() {
   var g = currentGuide;
   var text = g.t + '. Не істеу керек. ' + g['do'].map(function (x, i) { return (i + 1) + '. ' + x; }).join(' ') +
     ' Не істеуге болмайды. ' + (g.dont || []).join(' ');
-  var u = new SpeechSynthesisUtterance(text);
   var voices = speechSynthesis.getVoices();
-  var v = voices.find(function (v) { return /^kk/i.test(v.lang); }) || voices.find(function (v) { return /^ru/i.test(v.lang); });
-  if (v) { u.voice = v; u.lang = v.lang; } else { u.lang = 'kk-KZ'; }
-  if (!voices.some(function (v) { return /^kk/i.test(v.lang); })) toast('Қазақша дауыс табылмады, ең жақын дауыс қолданылады');
+  var kk = voices.find(function (v) { return /^kk/i.test(v.lang); });
+  if (voices.length && !kk) {
+    toast('Қазақша дауыс жоқ. Телефон баптауынан Google дауыс деректеріне қазақ тілін қосыңыз.');
+    return;
+  }
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = 'kk-KZ';
+  if (kk) { u.voice = kk; u.lang = kk.lang; }
   speechSynthesis.speak(u);
 }
 
