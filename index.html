@@ -4,17 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#c62828">
-
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
 <title>SOS Көмек</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-  <h1>🆘 SOS Көмек</h1>
+  <h1 data-i18n="appName">SOS Көмек</h1>
   <div class="tools">
-    <button id="btnTheme" aria-label="Түнгі режим">🌙</button>
-    <button id="btnFont" aria-label="Қаріпті үлкейту">A+</button>
+    <select id="lang" aria-label="Language">
+      <option value="kk">ҚАЗ</option>
+      <option value="ru">РУС</option>
+      <option value="en">ENG</option>
+    </select>
+    <button id="btnTheme" data-i18n-aria="themeAria" aria-label="Түнгі режим">🌙</button>
+    <button id="btnFont" data-i18n-aria="fontAria" aria-label="Қаріпті үлкейту">A+</button>
   </div>
 </header>
 
@@ -22,103 +30,115 @@
   <!-- БАСТЫ -->
   <section id="s-home" class="screen active">
     <div class="sos-wrap">
-      <button class="sos" id="btnSOS">SOS<small>басыңыз</small></button>
+      <button class="sos" id="btnSOS"><span class="sos-t">SOS</span><small data-i18n="tapHere">басыңыз</small></button>
     </div>
-    <p class="muted" style="text-align:center;margin-top:-4px">Басқанда: 1) 112-ге қоңырау, 2) орныңыз жақындарға жіберіледі.</p>
+    <a class="btn yellow big" href="tel:112" data-i18n="call112">📞 112-ге қоңырау шалу</a>
+    <p class="muted center" data-i18n="homeHint"></p>
 
     <div class="card" id="panelSOS" style="display:none">
-      <h2>🚨 Көмек шақыру</h2>
-      <a class="btn red" href="tel:112">📞 112-ге қоңырау шалу</a>
-      <div id="locStatus" class="muted" style="margin-top:10px">📍 Орын анықталуда…</div>
+      <h2 data-i18n="panelTitle"></h2>
+      <a class="btn red" href="tel:112" data-i18n="call112"></a>
+      <div id="locStatus" class="muted" style="margin-top:10px"></div>
       <div id="sendBox"></div>
-      <button class="btn gray" id="btnCopyLoc">📋 Орынды көшіру</button>
-      <p class="muted">Қоңырау шалғанда айтыңыз: не болды, қанша адам зардап шекті, мекенжай немесе бағдар.</p>
+      <button class="btn gray" id="btnCopyLoc" data-i18n="copyLoc"></button>
+      <p class="muted" data-i18n="callTell"></p>
     </div>
 
-    <h2 style="font-size:1.05rem">Төтенше нөмірлер</h2>
+    <h2 class="h2s" data-i18n="numbersTitle"></h2>
     <div class="grid">
-      <a class="num" href="tel:112"><b>112</b><span>Бірыңғай құтқару</span></a>
-      <a class="num" href="tel:103"><b>103</b><span>Жедел жәрдем</span></a>
-      <a class="num" href="tel:101"><b>101</b><span>Өрт сөндіру</span></a>
-      <a class="num" href="tel:102"><b>102</b><span>Полиция</span></a>
+      <a class="num" href="tel:112"><b>112</b><span data-i18n="n112"></span></a>
+      <a class="num" href="tel:103"><b>103</b><span data-i18n="n103"></span></a>
+      <a class="num" href="tel:101"><b>101</b><span data-i18n="n101"></span></a>
+      <a class="num" href="tel:102"><b>102</b><span data-i18n="n102"></span></a>
     </div>
-    <p class="warn">Бұл қосымша дәрігерді алмастырмайды. Қауіпті жағдайда әрқашан алдымен 112/103-ке қоңырау шалыңыз.</p>
+    <p class="warn" data-i18n="disclaimer"></p>
   </section>
 
   <!-- НҰСҚАУЛЫҚ ТІЗІМІ -->
   <section id="s-guides" class="screen">
-    <input type="search" id="q" placeholder="🔍 Іздеу: жану, қан кету, тұншығу…">
+    <input type="search" id="q" data-i18n-ph="searchPh">
     <div class="chips" id="chips"></div>
     <div id="list"></div>
   </section>
 
   <!-- НҰСҚАУЛЫҚ ТОЛЫҚ -->
   <section id="s-detail" class="screen">
-    <button class="back" id="btnBack">← Артқа</button>
+    <button class="back" id="btnBack" data-i18n="back"></button>
     <div id="detail"></div>
   </section>
 
   <!-- CPR -->
   <section id="s-cpr" class="screen">
     <div class="card metro">
-      <h2>❤️ Жүрекке массаж ырғағы</h2>
-      <p class="muted">Кеуденің ортасын қатты әрі жылдам басыңыз: минутына 100–120 рет. Дыбыс пен діріл ырғақ береді.</p>
+      <h2 data-i18n="cprTitle"></h2>
+      <p class="muted" data-i18n="cprDesc"></p>
       <div class="beat" id="beat"></div>
-      <div style="font-size:1.4rem;font-weight:700"><span id="bpm">110</span> /мин</div>
-      <input type="range" id="bpmRange" min="100" max="120" value="110" style="width:80%">
-      <button class="btn red" id="btnMetro">▶ Бастау</button>
-      <a class="btn gray" href="tel:112">📞 Алдымен 112-ге қоңырау шалыңыз</a>
+      <div class="bpmline"><span id="bpm">110</span> <span data-i18n="bpmUnit"></span></div>
+      <input type="range" id="bpmRange" min="100" max="120" value="110" class="range" aria-label="BPM">
+      <button class="btn red" id="btnMetro" data-i18n="start"></button>
+      <a class="btn gray" href="tel:112" data-i18n="cprCallFirst"></a>
     </div>
     <div class="card">
-      <h2>Қысқаша қадамдар (ересек)</h2>
-      <ol>
-        <li>Қауіпсіздігіңізді тексеріңіз. Адамды қатты шақырып, иығынан сілкіңіз.</li>
-        <li>Жауап жоқ, тыныс жоқ немесе әдеттегідей емес болса, 112-ге қоңырау шалыңыз (спикерфонмен).</li>
-        <li>Адамды қатты тегіс жерге шалқасынан жатқызыңыз.</li>
-        <li>Алақаныңызды кеуде сүйегінің ортасына қойып, қолды түзу ұстап, шамамен 5–6 см тереңдікке басыңыз.</li>
-        <li>Әр басудан кейін кеуде толық көтерілсін. Жедел жәрдем келгенше немесе адам өзі тыныс алғанша тоқтамаңыз.</li>
-        <li>Жақын жерде дефибриллятор (AED) болса, әкелуді сұраңыз және аппараттың дауыстық нұсқауын орындаңыз.</li>
-      </ol>
-      <p class="muted">Қолдан тыныс беруді үйренбеген болсаңыз, тек кеудеге массаж жасаңыз.</p>
+      <h2 data-i18n="cprStepsTitle"></h2>
+      <ol id="cprSteps"></ol>
+      <p class="muted" data-i18n="cprNote"></p>
+      <button class="btn gray" id="btnCprSpeak" data-i18n="cprSpeak"></button>
     </div>
+  </section>
+
+  <!-- ТЕСТ -->
+  <section id="s-quiz" class="screen">
+    <div class="card" id="quizBox"></div>
   </section>
 
   <!-- ЖАҚЫНДАР -->
   <section id="s-contacts" class="screen">
     <div class="card">
-      <h2>👨‍👩‍👧 Сенімді адамдар</h2>
-      <p class="muted">SOS басылғанда орныңыз осы адамдарға жіберуге дайын болады. Деректер тек осы телефонда сақталады.</p>
+      <h2 data-i18n="ctTitle"></h2>
+      <p class="muted" data-i18n="ctDesc"></p>
       <div id="contactList"></div>
-      <input type="text" id="cName" placeholder="Аты (мысалы: Анам)">
-      <input type="tel" id="cPhone" placeholder="+7 7XX XXX XX XX">
-      <button class="btn green" id="btnAddContact">➕ Қосу</button>
+      <input type="text" id="cName" data-i18n-ph="namePh">
+      <input type="tel" id="cPhone" data-i18n-ph="phonePh">
+      <button class="btn green" id="btnAddContact" data-i18n="add"></button>
     </div>
     <div class="card">
-      <h2>🩺 Медициналық карта</h2>
-      <p class="muted">Қан тобы, аллергия, тұрақты дәрілер. Көмекшілерге көрсету үшін. Тек осы телефонда сақталады.</p>
-      <input type="text" id="mBlood" placeholder="Қан тобы (мысалы: A(II) Rh+)">
-      <input type="text" id="mAllergy" placeholder="Аллергия">
-      <input type="text" id="mMeds" placeholder="Тұрақты қабылдайтын дәрілер">
-      <button class="btn green" id="btnSaveMed">💾 Сақтау</button>
+      <h2 data-i18n="medTitle"></h2>
+      <p class="muted" data-i18n="medDesc"></p>
+      <input type="text" id="mBlood" data-i18n-ph="bloodPh">
+      <input type="text" id="mAllergy" data-i18n-ph="allergyPh">
+      <input type="text" id="mMeds" data-i18n-ph="medsPh">
+      <button class="btn green" id="btnSaveMed" data-i18n="save"></button>
     </div>
     <div class="card">
-      <h2>📲 Басқаларға бөлісу</h2>
-      <p class="muted">Қосымша тегін. Сілтемені достарыңызға жіберіңіз.</p>
-      <button class="btn" id="btnShare">Сілтемені бөлісу</button>
+      <h2 data-i18n="bkTitle"></h2>
+      <p class="muted" data-i18n="bkDesc"></p>
+      <button class="btn" id="btnExport" data-i18n="bkExport"></button>
+      <button class="btn gray" id="btnBackupCopy" data-i18n="bkCopy"></button>
+      <label class="btn gray filebtn" for="fileImport" data-i18n="bkImportFile"></label>
+      <input type="file" id="fileImport" accept=".json,application/json,text/plain" class="hidefile">
+      <textarea id="backupText" rows="3" data-i18n-ph="bkPastePh"></textarea>
+      <button class="btn gray" id="btnRestore" data-i18n="bkRestore"></button>
+    </div>
+    <div class="card">
+      <h2 data-i18n="shareTitle"></h2>
+      <p class="muted" data-i18n="shareDesc"></p>
+      <button class="btn" id="btnShare" data-i18n="shareBtn"></button>
     </div>
   </section>
 </main>
 
 <nav>
-  <button data-go="home" class="active"><span class="i">🆘</span>SOS</button>
-  <button data-go="guides"><span class="i">📖</span>Нұсқаулық</button>
-  <button data-go="cpr"><span class="i">❤️</span>CPR</button>
-  <button data-go="contacts"><span class="i">👤</span>Менің</button>
+  <button data-go="home" class="active"><span class="i">🆘</span><span data-i18n="navSOS">SOS</span></button>
+  <button data-go="guides"><span class="i">📖</span><span data-i18n="navGuides"></span></button>
+  <button data-go="cpr"><span class="i">❤️</span><span data-i18n="navCPR">CPR</span></button>
+  <button data-go="quiz"><span class="i">📝</span><span data-i18n="navQuiz"></span></button>
+  <button data-go="contacts"><span class="i">👤</span><span data-i18n="navMe"></span></button>
 </nav>
 
 <div class="toast" id="toast"></div>
 
 <script src="data.js"></script>
+<script src="i18n.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
