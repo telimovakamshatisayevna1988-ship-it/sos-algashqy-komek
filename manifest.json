@@ -1,0 +1,20 @@
+{
+  "name": "SOS Көмек",
+  "short_name": "SOS Көмек",
+  "description": "Қазақша алғашқы көмек және бір басумен SOS",
+  "lang": "kk",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#c62828",
+  "theme_color": "#c62828",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
