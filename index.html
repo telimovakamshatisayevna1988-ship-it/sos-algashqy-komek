@@ -110,12 +110,10 @@ input[type=text],input[type=tel],input[type=search],textarea{width:100%;padding:
     <div class="sos-wrap">
       <button class="sos" id="btnSOS"><span class="sos-t">SOS</span><small data-i18n="tapHere">басыңыз</small></button>
     </div>
-    <a class="btn yellow big" href="tel:112" data-i18n="call112">📞 112-ге қоңырау шалу</a>
     <p class="muted center" data-i18n="homeHint"></p>
 
     <div class="card" id="panelSOS" style="display:none">
       <h2 data-i18n="panelTitle"></h2>
-      <a class="btn red" href="tel:112" data-i18n="call112"></a>
       <div id="locStatus" class="muted" style="margin-top:10px"></div>
       <div id="sendBox"></div>
       <button class="btn gray" id="btnCopyLoc" data-i18n="copyLoc"></button>
@@ -124,7 +122,6 @@ input[type=text],input[type=tel],input[type=search],textarea{width:100%;padding:
 
     <h2 class="h2s" data-i18n="numbersTitle"></h2>
     <div class="grid">
-      <a class="num" href="tel:112"><b>112</b><span data-i18n="n112"></span></a>
       <a class="num" href="tel:103"><b>103</b><span data-i18n="n103"></span></a>
       <a class="num" href="tel:101"><b>101</b><span data-i18n="n101"></span></a>
       <a class="num" href="tel:102"><b>102</b><span data-i18n="n102"></span></a>
@@ -154,7 +151,6 @@ input[type=text],input[type=tel],input[type=search],textarea{width:100%;padding:
       <div class="bpmline"><span id="bpm">110</span> <span data-i18n="bpmUnit"></span></div>
       <input type="range" id="bpmRange" min="100" max="120" value="110" class="range" aria-label="BPM">
       <button class="btn red" id="btnMetro" data-i18n="start"></button>
-      <a class="btn gray" href="tel:112" data-i18n="cprCallFirst"></a>
     </div>
     <div class="card">
       <h2 data-i18n="cprStepsTitle"></h2>
@@ -794,7 +790,6 @@ function openGuide(id) {
   currentGuide = g;
   $('#detail').innerHTML =
     '<h2 style="margin:0 0 4px">' + g.e + ' ' + esc(g.t) + ' <span class="tag ' + URGCLS[g.u] + '">' + esc(t(URGKEY[g.u])) + '</span></h2>' +
-    '<a class="btn red" href="tel:112">' + esc(t('call112')) + '</a>' +
     '<button class="btn gray" id="btnSpeak">' + esc(t('speak')) + '</button>' +
     (g.translated ? '' : '<div class="notr">' + esc(t('notTranslated')) + '</div>') +
     sec('sym', t('secSym'), g.sym, false) +
