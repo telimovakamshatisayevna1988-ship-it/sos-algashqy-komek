@@ -1,1 +1,1107 @@
-\n\n\n\n\n", "sw.js": "var CACHE = 'sos-komek-v3';\nvar FILES = ['./', 'index.html', 'style.css', 'data.js', 'i18n.js', 'app.js', 'manifest.json', 'icon.svg'];\n\nself.addEventListener('install', function (e) {\n e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(FILES); }));\n self.skipWaiting();\n});\n\nself.addEventListener('activate', function (e) {\n e.waitUntil(\n caches.keys().then(function (keys) {\n return Promise.all(keys.filter(function (k) { return k !== CACHE; }).map(function (k) { return caches.delete(k); }));\n })\n );\n self.clients.claim();\n});\n\n// \u041a\u044d\u0448\u0442\u0435\u043d \u0431\u0456\u0440\u0434\u0435\u043d \u043a\u04e9\u0440\u0441\u0435\u0442\u0435\u0434\u0456, \u0444\u043e\u043d\u0434\u0430 \u0436\u0430\u04a3\u0430\u0440\u0442\u0430\u0434\u044b (\u043e\u0444\u043b\u0430\u0439\u043d \u0436\u04b1\u043c\u044b\u0441 \u0456\u0441\u0442\u0435\u0439\u0434\u0456, \u0436\u0430\u04a3\u0430 \u043d\u04b1\u0441\u049b\u0430 \u043a\u0435\u043b\u0435\u0441\u0456 \u0430\u0448\u049b\u0430\u043d\u0434\u0430 \u0448\u044b\u0493\u0430\u0434\u044b)\nself.addEventListener('fetch', function (e) {\n if (e.request.method !== 'GET') return;\n var url = new URL(e.request.url);\n if (url.origin !== location.origin) return;\n e.respondWith(\n caches.match(e.request).then(function (hit) {\n var net = fetch(e.request).then(function (res) {\n if (res && res.status === 200) {\n var copy = res.clone();\n caches.open(CACHE).then(function (c) { c.put(e.request, copy); });\n }\n return res;\n }).catch(function () { return hit || caches.match('index.html'); });\n return hit || net;\n })\n );\n});\n", "manifest.json": "{\n \"name\": \"SOS \u041a\u04e9\u043c\u0435\u043a\",\n \"short_name\": \"SOS \u041a\u04e9\u043c\u0435\u043a\",\n \"description\": \"\u049a\u0430\u0437\u0430\u049b\u0448\u0430 \u0430\u043b\u0493\u0430\u0448\u049b\u044b \u043a\u04e9\u043c\u0435\u043a \u0436\u04d9\u043d\u0435 \u0431\u0456\u0440 \u0431\u0430\u0441\u0443\u043c\u0435\u043d SOS\",\n \"lang\": \"kk\",\n \"start_url\": \"./\",\n \"scope\": \"./\",\n \"display\": \"standalone\",\n \"orientation\": \"portrait\",\n \"background_color\": \"#c62828\",\n \"theme_color\": \"#c62828\",\n \"icons\": [\n {\n \"src\": \"icon.svg\",\n \"sizes\": \"any\",\n \"type\": \"image/svg+xml\",\n \"purpose\": \"any\"\n }\n ]\n}\n", "icon.svg": "\n"}; var ORDER=["index.html", "sw.js", "manifest.json", "icon.svg"]; var NOTES={"index.html": "\u041c\u0406\u041d\u0414\u0415\u0422\u0422\u0406. \u049a\u041e\u0421\u042b\u041c\u0428\u0410\u041d\u042b\u04a2 \u0411\u04d8\u0420\u0406 \u041e\u0421\u042b\u041d\u0414\u0410: \u0435\u0441\u043a\u0456 index.html \u0456\u0448\u0456\u043d \u0442\u043e\u043b\u044b\u049b \u04e9\u0448\u0456\u0440\u0456\u043f, \u0436\u0430\u04a3\u0430\u0441\u044b\u043d \u049b\u043e\u0439\u044b\u04a3\u044b\u0437", "sw.js": "\u049a\u041e\u0421\u042b\u041c\u0428\u0410 (\u0438\u043d\u0442\u0435\u0440\u043d\u0435\u0442\u0441\u0456\u0437 \u0436\u04b1\u043c\u044b\u0441 \u04af\u0448\u0456\u043d): \u0436\u0430\u04a3\u0430 \u0444\u0430\u0439\u043b \u0436\u0430\u0441\u0430\u04a3\u044b\u0437 \u043d\u0435\u043c\u0435\u0441\u0435 \u0430\u0443\u044b\u0441\u0442\u044b\u0440\u044b\u04a3\u044b\u0437", "manifest.json": "\u049a\u041e\u0421\u042b\u041c\u0428\u0410 (\u0442\u0435\u043b\u0435\u0444\u043e\u043d\u0493\u0430 \u043e\u0440\u043d\u0430\u0442\u0443 \u04af\u0448\u0456\u043d): \u0436\u0430\u04a3\u0430 \u0444\u0430\u0439\u043b \u0436\u0430\u0441\u0430\u04a3\u044b\u0437", "icon.svg": "\u049a\u041e\u0421\u042b\u041c\u0428\u0410 (\u0431\u0435\u043b\u0433\u0456\u0448\u0435): \u0436\u0430\u04a3\u0430 \u0444\u0430\u0439\u043b \u0436\u0430\u0441\u0430\u04a3\u044b\u0437"}; var host=document.getElementById('files'); host.style.display='flex';host.style.flexDirection='column';host.style.gap='14px'; ORDER.forEach(function(name,i){ var text=DATA[name]; var box=document.createElement('div');box.className='file'; var h=document.createElement('h2');h.textContent=(i+1)+'. '+name; var size=document.createElement('div');size.className='size';size.textContent=NOTES[name]+' · '+Math.round(text.length/1000)+' мың таңба'; var row=document.createElement('div');row.className='row'; var b=document.createElement('button');b.type='button';b.textContent='Көшіру'; var ta=document.createElement('textarea');ta.readOnly=true;ta.value=text;ta.setAttribute('aria-label',name+' мәтіні'); function ok(){b.textContent='Көшірілді ✓';b.className='done';setTimeout(function(){b.textContent='Көшіру';b.className='';},2500);} function fallback(){ta.focus();ta.select();try{ta.setSelectionRange(0,text.length);}catch(e){}b.textContent='Мәтін таңдалды: ұзақ басып «Көшіру» таңдаңыз';} b.onclick=function(){ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(ok,fallback);}else{fallback();} }; row.appendChild(b);box.appendChild(h);box.appendChild(size);box.appendChild(row);box.appendChild(ta);host.appendChild(box); });
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#c62828">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>SOS Көмек</title>
+<style>
+:root{
+--bg:#f6f7f9; --card:#ffffff; --text:#1b1f24; --muted:#5b6670; --line:#e3e6ea;
+--red:#c62828; --red2:#e53935; --amber:#f9a825; --green:#2e7d32; --blue:#1565c0; --yellow:#ffd600;
+--fs:16px;
+}
+:root[data-theme="dark"]{
+--bg:#0f1317; --card:#1a2027; --text:#eef1f4; --muted:#9aa6b2; --line:#2a323b;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{font-size:16px;font-size:var(--fs)}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:#f6f7f9;background:var(--bg);color:#1b1f24;color:var(--text);line-height:1.5;padding-bottom:90px}
+header{background:#c62828;background:var(--red);color:#fff;padding:12px 16px;padding-top:calc(12px + env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5}
+header h1{font-size:1.15rem;margin:0}
+header .tools{display:flex;align-items:center}
+header .tools button,header .tools select{background:rgba(255,255,255,.2);color:#fff;border:0;border-radius:10px;padding:9px 10px;font-size:1rem;margin-left:6px}
+header .tools select option{color:#111}
+main{max-width:640px;margin:0 auto;padding:16px}
+.screen{display:none}.screen.active{display:block}
+nav{position:fixed;bottom:0;left:0;right:0;background:#ffffff;background:var(--card);border-top:1px solid #e3e6ea;border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom);z-index:5}
+nav button{flex:1;background:none;border:0;padding:9px 2px;color:#5b6670;color:var(--muted);font-size:.74rem}
+nav button .i{display:block;font-size:1.35rem}
+nav button.active{color:#c62828;color:var(--red);font-weight:700}
+.sos-wrap{text-align:center;margin:8px 0 16px}
+.sos{width:72vw;height:72vw;max-width:280px;max-height:280px;border-radius:50%;border:8px solid #ffd600;border:8px solid var(--yellow);background:radial-gradient(circle at 35% 30%,#e53935,#c62828);background:radial-gradient(circle at 35% 30%,var(--red2),var(--red));color:#fff;font-weight:800;box-shadow:0 0 0 10px rgba(198,40,40,.18),0 12px 34px rgba(198,40,40,.5);animation:pulse 2s infinite}
+.sos .sos-t{display:block;font-size:4rem;letter-spacing:3px;text-shadow:0 2px 6px rgba(0,0,0,.35)}
+.sos small{display:block;font-size:1rem;font-weight:600;letter-spacing:0;margin-top:2px}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 10px rgba(198,40,40,.18),0 12px 34px rgba(198,40,40,.5)}50%{box-shadow:0 0 0 22px rgba(198,40,40,.06),0 12px 34px rgba(198,40,40,.5)}}
+.card{background:#ffffff;background:var(--card);border:1px solid #e3e6ea;border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}
+.card h2{margin:0 0 8px;font-size:1.05rem}
+.h2s{font-size:1.05rem}
+.btn{display:block;width:100%;text-align:center;text-decoration:none;border:0;border-radius:14px;padding:15px;min-height:52px;font-size:1.05rem;font-weight:700;margin-top:10px;color:#fff;background:#1565c0;background:var(--blue)}
+.btn.red{background:#c62828;background:var(--red)}.btn.green{background:#2e7d32;background:var(--green)}.btn.gray{background:#5b6670;background:var(--muted)}
+.btn.yellow{background:#ffd600;background:var(--yellow);color:#111}
+.btn.big{font-size:1.35rem;padding:18px;margin-bottom:6px}
+.filebtn{cursor:pointer}
+.hidefile{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.center{text-align:center}
+.grid{display:flex;flex-wrap:wrap;margin:-4px}.grid>.num{width:calc(50% - 8px);margin:4px}
+.num{display:block;text-decoration:none;color:#1b1f24;color:var(--text);background:#ffffff;background:var(--card);border:1px solid #e3e6ea;border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center}
+.num b{display:block;font-size:1.8rem;color:#c62828;color:var(--red)}
+.num span{font-size:.85rem;color:#5b6670;color:var(--muted)}
+.muted{color:#5b6670;color:var(--muted);font-size:.9rem}
+input[type=text],input[type=tel],input[type=search],textarea{width:100%;padding:13px;border:1px solid #e3e6ea;border:1px solid var(--line);border-radius:12px;background:#ffffff;background:var(--card);color:#1b1f24;color:var(--text);font-size:1rem;margin-top:8px;font-family:inherit}
+.chips{display:flex;overflow-x:auto;padding:4px 0 10px}
+.chip{flex:none;border:1px solid #e3e6ea;border:1px solid var(--line);background:#ffffff;background:var(--card);color:#1b1f24;color:var(--text);border-radius:999px;padding:9px 14px;font-size:.9rem;margin-right:6px}
+.chip.on{background:#1b1f24;background:var(--text);color:#f6f7f9;color:var(--bg)}
+.item{display:flex;align-items:center;width:100%;text-align:left;background:#ffffff;background:var(--card);border:1px solid #e3e6ea;border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:8px;color:#1b1f24;color:var(--text);font-size:1rem;min-height:56px}
+.item .e{font-size:1.6rem;margin-right:12px}
+.item .t{flex:1;font-weight:600}
+.tag{font-size:.72rem;border-radius:999px;padding:3px 9px;color:#fff;margin-left:8px;white-space:nowrap}
+.u-r{background:#c62828;background:var(--red)}.u-y{background:#b8860b}.u-g{background:#2e7d32;background:var(--green)}
+.back{background:none;border:0;color:#1565c0;color:var(--blue);font-size:1.05rem;padding:8px 0;margin-bottom:6px}
+.sec{border-left:5px solid #e3e6ea;border-left:5px solid var(--line);padding:2px 0 2px 12px;margin:14px 0}
+.sec h3{margin:0 0 4px;font-size:1.02rem}
+.sec ol,.sec ul{margin:4px 0;padding-left:20px}
+.sec li{margin:6px 0}
+.sec.do{border-color:#2e7d32;border-color:var(--green)}.sec.dont{border-color:#c62828;border-color:var(--red)}.sec.call{border-color:#f9a825;border-color:var(--amber)}.sec.sym{border-color:#1565c0;border-color:var(--blue)}
+.notr{background:#ffffff;background:var(--card);border:1px dashed #f9a825;border:1px dashed var(--amber);border-radius:12px;padding:10px;font-size:.9rem;margin:10px 0}
+.warn{font-size:.82rem;color:#5b6670;color:var(--muted);text-align:center;margin:18px 0}
+.metro{text-align:center}
+.beat{width:90px;height:90px;border-radius:50%;background:#c62828;background:var(--red);margin:12px auto;transition:transform .08s}
+.beat.on{transform:scale(1.25)}
+.bpmline{font-size:1.5rem;font-weight:700}
+.range{width:80%}
+#cprSteps{padding-left:20px}
+#cprSteps li{margin:6px 0}
+.toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%);background:#222;color:#fff;padding:11px 16px;border-radius:12px;font-size:.92rem;display:none;z-index:9;max-width:90%}
+.contact{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #e3e6ea;border-bottom:1px solid var(--line)}
+.contact button{background:none;border:0;color:#c62828;color:var(--red);font-size:1.2rem;padding:8px}
+.qprog{font-size:.88rem;color:#5b6670;color:var(--muted);margin-bottom:6px}
+.qtext{font-size:1.1rem;font-weight:700;margin:4px 0 8px}
+.opt{display:block;width:100%;text-align:left;background:#f6f7f9;background:var(--bg);color:#1b1f24;color:var(--text);border:2px solid #e3e6ea;border:2px solid var(--line);border-radius:12px;padding:13px;margin-top:8px;font-size:1rem}
+.opt.ok{border-color:#2e7d32;border-color:var(--green);background:rgba(46,125,50,.15)}
+.opt.no{border-color:#c62828;border-color:var(--red);background:rgba(198,40,40,.15)}
+.qexp{margin-top:12px;padding:10px;border-radius:10px;background:#f6f7f9;background:var(--bg);font-size:.95rem}
+.qscore{font-size:1.6rem;font-weight:800;text-align:center;margin:10px 0}
+
+</style>
+</head>
+<body>
+
+<header>
+  <h1 data-i18n="appName">SOS Көмек</h1>
+  <div class="tools">
+    <select id="lang" aria-label="Language">
+      <option value="kk">ҚАЗ</option>
+      <option value="ru">РУС</option>
+      <option value="en">ENG</option>
+    </select>
+    <button id="btnTheme" data-i18n-aria="themeAria" aria-label="Түнгі режим">🌙</button>
+    <button id="btnFont" data-i18n-aria="fontAria" aria-label="Қаріпті үлкейту">A+</button>
+  </div>
+</header>
+
+<main>
+  <!-- БАСТЫ -->
+  <section id="s-home" class="screen active">
+    <div class="sos-wrap">
+      <button class="sos" id="btnSOS"><span class="sos-t">SOS</span><small data-i18n="tapHere">басыңыз</small></button>
+    </div>
+    <a class="btn yellow big" href="tel:112" data-i18n="call112">📞 112-ге қоңырау шалу</a>
+    <p class="muted center" data-i18n="homeHint"></p>
+
+    <div class="card" id="panelSOS" style="display:none">
+      <h2 data-i18n="panelTitle"></h2>
+      <a class="btn red" href="tel:112" data-i18n="call112"></a>
+      <div id="locStatus" class="muted" style="margin-top:10px"></div>
+      <div id="sendBox"></div>
+      <button class="btn gray" id="btnCopyLoc" data-i18n="copyLoc"></button>
+      <p class="muted" data-i18n="callTell"></p>
+    </div>
+
+    <h2 class="h2s" data-i18n="numbersTitle"></h2>
+    <div class="grid">
+      <a class="num" href="tel:112"><b>112</b><span data-i18n="n112"></span></a>
+      <a class="num" href="tel:103"><b>103</b><span data-i18n="n103"></span></a>
+      <a class="num" href="tel:101"><b>101</b><span data-i18n="n101"></span></a>
+      <a class="num" href="tel:102"><b>102</b><span data-i18n="n102"></span></a>
+    </div>
+    <p class="warn" data-i18n="disclaimer"></p>
+  </section>
+
+  <!-- НҰСҚАУЛЫҚ ТІЗІМІ -->
+  <section id="s-guides" class="screen">
+    <input type="search" id="q" data-i18n-ph="searchPh">
+    <div class="chips" id="chips"></div>
+    <div id="list"></div>
+  </section>
+
+  <!-- НҰСҚАУЛЫҚ ТОЛЫҚ -->
+  <section id="s-detail" class="screen">
+    <button class="back" id="btnBack" data-i18n="back"></button>
+    <div id="detail"></div>
+  </section>
+
+  <!-- CPR -->
+  <section id="s-cpr" class="screen">
+    <div class="card metro">
+      <h2 data-i18n="cprTitle"></h2>
+      <p class="muted" data-i18n="cprDesc"></p>
+      <div class="beat" id="beat"></div>
+      <div class="bpmline"><span id="bpm">110</span> <span data-i18n="bpmUnit"></span></div>
+      <input type="range" id="bpmRange" min="100" max="120" value="110" class="range" aria-label="BPM">
+      <button class="btn red" id="btnMetro" data-i18n="start"></button>
+      <a class="btn gray" href="tel:112" data-i18n="cprCallFirst"></a>
+    </div>
+    <div class="card">
+      <h2 data-i18n="cprStepsTitle"></h2>
+      <ol id="cprSteps"></ol>
+      <p class="muted" data-i18n="cprNote"></p>
+      <button class="btn gray" id="btnCprSpeak" data-i18n="cprSpeak"></button>
+    </div>
+  </section>
+
+  <!-- ТЕСТ -->
+  <section id="s-quiz" class="screen">
+    <div class="card" id="quizBox"></div>
+  </section>
+
+  <!-- ЖАҚЫНДАР -->
+  <section id="s-contacts" class="screen">
+    <div class="card">
+      <h2 data-i18n="ctTitle"></h2>
+      <p class="muted" data-i18n="ctDesc"></p>
+      <div id="contactList"></div>
+      <input type="text" id="cName" data-i18n-ph="namePh">
+      <input type="tel" id="cPhone" data-i18n-ph="phonePh">
+      <button class="btn green" id="btnAddContact" data-i18n="add"></button>
+    </div>
+    <div class="card">
+      <h2 data-i18n="medTitle"></h2>
+      <p class="muted" data-i18n="medDesc"></p>
+      <input type="text" id="mBlood" data-i18n-ph="bloodPh">
+      <input type="text" id="mAllergy" data-i18n-ph="allergyPh">
+      <input type="text" id="mMeds" data-i18n-ph="medsPh">
+      <button class="btn green" id="btnSaveMed" data-i18n="save"></button>
+    </div>
+    <div class="card">
+      <h2 data-i18n="bkTitle"></h2>
+      <p class="muted" data-i18n="bkDesc"></p>
+      <button class="btn" id="btnExport" data-i18n="bkExport"></button>
+      <button class="btn gray" id="btnBackupCopy" data-i18n="bkCopy"></button>
+      <label class="btn gray filebtn" for="fileImport" data-i18n="bkImportFile"></label>
+      <input type="file" id="fileImport" accept=".json,application/json,text/plain" class="hidefile">
+      <textarea id="backupText" rows="3" data-i18n-ph="bkPastePh"></textarea>
+      <button class="btn gray" id="btnRestore" data-i18n="bkRestore"></button>
+    </div>
+    <div class="card">
+      <h2 data-i18n="shareTitle"></h2>
+      <p class="muted" data-i18n="shareDesc"></p>
+      <button class="btn" id="btnShare" data-i18n="shareBtn"></button>
+    </div>
+  </section>
+</main>
+
+<nav>
+  <button data-go="home" class="active"><span class="i">🆘</span><span data-i18n="navSOS">SOS</span></button>
+  <button data-go="guides"><span class="i">📖</span><span data-i18n="navGuides"></span></button>
+  <button data-go="cpr"><span class="i">❤️</span><span data-i18n="navCPR">CPR</span></button>
+  <button data-go="quiz"><span class="i">📝</span><span data-i18n="navQuiz"></span></button>
+  <button data-go="contacts"><span class="i">👤</span><span data-i18n="navMe"></span></button>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ НҰСҚАУЛЫҚ ДЕРЕКТЕРІ ============
+   Дереккөз: «Алғашқы медициналық көмек нұсқаулығы» (25 жағдай + қосымша).
+   Жаңа жағдай қосу үшін төмендегі тізімге осындай блок қосыңыз.
+   u: 'r' = шұғыл (қызыл), 'y' = маңызды (сары), 'g' = жеңіл (жасыл) */
+var GUIDES = [
+ {id:"cpr",e:"❤️",t:"Жүрек тоқтауы",u:"r",
+  sym:["Ес-түссіз", "қалыпты тыныс жоқ немесе тек сирек қырылдаған дем бар", "жауап бермейді"],
+  do:["Қауіпсіздікті тексеріңіз.", "Адамды дауыстап шақырып, иығынан түртіңіз.", "103/112 шақырып, телефонды дауысзорайтқышқа қойыңыз.", "Қалыпты тыныс болмаса, кеуде ортасын минутына 100–120 рет, 5–6 см тереңдікке басыңыз.", "Үйретілген болсаңыз, 30 басу мен 2 дем беруді қолданыңыз.", "AED болса, нұсқауын орындаңыз.", "Көмек келгенше жалғастырыңыз."],
+  dont:["Тамыр соғысын ұзақ іздемеңіз.", "Ес-түссіз адамға су/дәрі бермеңіз.", "Кеуде басуын себепсіз тоқтатпаңыз."],
+  call:["Өмірге тікелей қауіп. Дереу әрекет етіңіз."]},
+ {id:"bleed",e:"🩸",t:"Қатты қан кету",u:"r",
+  sym:["Қан көп немесе атқылап ағады", "таңғыш/киім тез қанға малынуы", "бозару, суық тер, әлсіздік, естен тану"],
+  do:["Қолғап киіңіз.", "Жараны таза дәке/матамен тікелей қатты басыңыз.", "Өмірге қауіпті аяқ-қол қан кетуінде дайын турникетті жарадан жоғары, буынға емес жерге салып, қан тоқтағанша тартыңыз; уақытын белгілеңіз.", "Қадалған затты қозғамаңыз, айналасын таңғышпен бекітіңіз.", "Жатқызып, жылы ұстаңыз және 103/112 шақырыңыз."],
+  dont:["Қадалған затты суырмаңыз.", "Турникетті өз бетіңізше босатпаңыз.", "Жараға ұн, кофе, май жақпаңыз.", "Қанға малынған алғашқы таңғышты жұлып алмаңыз."],
+  call:["Қатты қан кету – шұғыл жағдай."]},
+ {id:"burn",e:"🔥",t:"Күйік",u:"r",
+  sym:["Қызару, ауырсыну, көпіршік", "терінің ақ/қоңыр/қаралануы", "үлкен күйікте әлсіздік"],
+  do:["Күйік көзін тоқтатыңыз.", "Күйген жерді салқын ағын сумен 20 минут салқындатыңыз.", "Ісіну басталмай тұрып сақина/сағатты шешіңіз.", "Жабыспайтын таза таңғышпен бос жабыңыз.", "Үлкен, терең немесе бет, қол, аяқ, жыныс мүшелері, ірі буындар күйсе, медициналық көмек шақырыңыз."],
+  dont:["Мұз қоймаңыз.", "Көпіршікті жармаңыз.", "Май, қаймақ, тіс пастасын жақпаңыз.", "Жабысып қалған киімді жұлып алмаңыз."],
+  call:["Тыныс жолы, бет/мойын немесе үлкен аумақ күйсе – дереу жәрдем."]},
+ {id:"choke",e:"😮‍💨",t:"Тұншығу (тыныс жолына зат кету)",u:"r",
+  sym:["Сөйлей/жөтеле алмау, дыбыссыз жөтел, тыныстың қиындауы, тамағын ұстау, көгеру"],
+  do:["Қатты жөтеліп, сөйлей алса, жөтелуіне мүмкіндік беріңіз.", "Толық бітелсе, ересекке алға еңкейтіп жауырын арасына 5 рет соғыңыз; әсер болмаса 5 рет іштен жоғары итеріңіз.", "Кезектестіріңіз.", "Жүкті адамға кеудеден итеру қолданылады.", "Есінен танса, 103/112 шақырып, ЖӨР бастаңыз; ауыздағы көрінетін затты ғана алыңыз."],
+  dont:["Көрінбейтін затты саусақпен іздемеңіз.", "Су/тамақ бермеңіз.", "Баланы төңкермеңіз.", "1 жасқа дейінгі нәрестеге іштен итеру жасалмайды: 5 арқа соққысы мен 5 кеуде басуы."],
+  call:["Толық бітелу немесе есінен тану – дереу жедел көмек."]},
+ {id:"stroke",e:"🧠",t:"Инсульт",u:"r",
+  sym:["Бет қисаяды", "бір қол әлсірейді", "сөйлеу бұзылады", "кенет көру/тепе-теңдік бұзылысы немесе қатты бас ауруы"],
+  do:["FAST: Face – бет, Arms – қол, Speech – сөйлеу, Time – уақыт.", "103/112 шақырыңыз.", "Белгі басталған уақытты белгілеңіз.", "Адамды тыныш ұстаңыз.", "Құсу/есі төмендеу болса, жарақатқа күдік жоқта қырына бұрыңыз.", "Ауыз арқылы ештеңе бермеңіз."],
+  dont:["Аспирин бермеңіз.", "Қан қысымын өз бетіңізше түсірмеңіз.", "Жүргізбеңіз.", "Белгі басылса да көмекті тоқтатпаңыз."],
+  call:["Инсультте әр минут маңызды."]},
+ {id:"seizure",e:"⚡",t:"Эпилепсиялық ұстама",u:"r",
+  sym:["Құлап қалу, есінен тану, дененің тартылуы/дірілдеуі", "ұстамадан кейін ұйқышылдық, шатасу"],
+  do:["Уақытты белгілеңіз.", "Басын жұмсақ затпен қорғаңыз, айналасындағы қауіпті заттарды алыңыз.", "Қимылын шектемеңіз.", "Ұстама тоқтаған соң тынысын тексеріп, қалыпты болса қырына жатқызыңыз.", "Жанында болыңыз."],
+  dont:["Қол-аяғын ұстамаңыз.", "Аузына зат салмаңыз.", "Су/дәрі бермеңіз.", "Бетінен ұрмаңыз."],
+  call:["5 минуттан ұзақ, қайталанған, алғаш рет болған ұстама, жарақат немесе тыныс бұзылысы болса 103/112."]},
+ {id:"faint",e:"😵",t:"Есінен тану",u:"y",
+  sym:["Бас айналу, көз қарауыту, бозару, суық тер, қысқа уақытқа есінен айырылу"],
+  do:["Шалқасынан жатқызыңыз; жарақат/тыныс қиындығы болмаса аяқтарын 20–30 см көтеріңіз.", "Таза ауа кіргізіп, киімін босатыңыз.", "Тынысын бақылаңыз.", "Есі тез қалпына келмесе немесе кеуде ауыруы/ентігу болса 103 шақырыңыз.", "Ес-түссіз, бірақ тынысы бар адамды қырына жатқызыңыз."],
+  dont:["Бетінен ұрмаңыз, мүсәтір иіскетпеңіз.", "Есін жимай су/тамақ бермеңіз.", "Бірден тұрғызбаңыз."],
+  call:["Қалыпты тыныс болмаса, жүрек тоқтауы алгоритмін бастаңыз."]},
+ {id:"nose",e:"👃",t:"Мұрыннан қан кету",u:"y",
+  sym:["Мұрыннан қан ағуы, қанның жұтқыншаққа ағуы, көп қан кетсе әлсіздік"],
+  do:["Отырғызып, басын алға еңкейтіңіз.", "Мұрынның жұмсақ бөлігін 10–15 минут үздіксіз қысыңыз.", "Қанды жұтпай түкірсін.", "Қан тоқтамаса немесе көп кетсе медициналық көмек шақырыңыз."],
+  dont:["Басты артқа шалқайтпаңыз.", "Мұрынға терең мақта тықпаңыз.", "Қан тоқтаған соң қатты сіңбірмеңіз."],
+  call:["Қан тоқтамаса немесе адам әлсіресе – медициналық көмек."]},
+ {id:"poison",e:"☠️",t:"Улану",u:"r",
+  sym:["Жүрек айну, құсу, іш ауыруы, бас айналу, әлсіздік, тершеңдік, шатасу, құрысу немесе тыныс қиындауы"],
+  do:["У көзімен байланысты тоқтатыңыз, өз қауіпсіздігіңізді сақтаңыз.", "103/112 шақырыңыз.", "Заттың атауын, мөлшерін және уақытын анықтаңыз; қаптамасын сақтаңыз.", "Теріден болса ластанған киімді шешіп, сумен жуыңыз.", "Көзге түссе 15–20 минут шайыңыз.", "Ес-түссіз, тынысы бар адамды қырына жатқызыңыз."],
+  dont:["Құстырмаңыз.", "Сүт, май, сода бермеңіз.", "Белсендірілген көмірді өз бетіңізше қолданбаңыз.", "Ес-түссіз адамға ауыздан ештеңе бермеңіз."],
+  call:["Құрысу, есінен тану, тыныс қиындауы – шұғыл жағдай."]},
+ {id:"shock",e:"🔌",t:"Электр тогының соғуы",u:"r",
+  sym:["Күйік ізі, бұлшықет тартылуы, есінен тану, жүрек ырғағы/тыныстың бұзылуы"],
+  do:["Алдымен электр қуатын өшіріңіз.", "Жоғары кернеулі сымға жақындамаңыз.", "Қауіпсіз болғанда есі мен тынысын тексеріңіз.", "Қалыпты тыныс болмаса 103/112 шақырып, ЖӨР/AED қолданыңыз.", "Күйікті құрғақ жабыспайтын таңғышпен жабыңыз.", "Медициналық тексеру қажет."],
+  dont:["Ток көзін ажыратпай адамға тимеңіз.", "Сулы қолмен құрылғыға жақындамаңыз.", "Күйікке май/мұз қоймаңыз."],
+  call:["Сыртқы жарақат аз болса да жүрекке әсер етуі мүмкін."]},
+ {id:"heat",e:"🌡️",t:"Күн өту және ыстық соғу",u:"y",
+  sym:["Бас ауруы, бас айналу, әлсіздік, жүрек айну, құсу, дене қызуы", "ауырында шатасу, құрысу, естен тану"],
+  do:["Көлеңкеге/салқын жерге апарыңыз.", "Артық киімін шешіңіз.", "Денесін салқын сумен сулап, желдетіңіз; салқын дымқыл маталар қолданыңыз.", "Шатасу/құрысу/естен тану болса 103/112 шақырып, салқындатуды жалғастырыңыз.", "Есі анық, жұта алса ғана су беріңіз."],
+  dont:["Ес-түссіз адамға су бермеңіз.", "Қалың орамаңыз.", "Дәрі беріп салқындатуды кешіктірмеңіз."],
+  call:["Естің шатасуы, құрысу немесе естен тану – өмірге қауіпті ыстық соғу."]},
+ {id:"fracture",e:"🦴",t:"Сүйек сынуы және буын шығуы",u:"r",
+  sym:["Ауырсыну, ісіну, көгеру, деформация, қозғалыстың шектелуі", "ашық сынықта сүйек көрінуі мүмкін"],
+  do:["Жарақаттанған бөлікті қозғалтпаңыз.", "Ыңғайлы қалыпта шинамен бекітіңіз, мүмкін болса көрші буындарды да қозғалтпай ұстаңыз.", "Ашық жараны таза таңғышпен жабыңыз.", "Саусақ түсі мен сезімталдығын бақылаңыз.", "Қажет болса жедел көмек шақырыңыз."],
+  dont:["Сүйекті/буынды орнына салмаңыз.", "Сүйекті жараға итермеңіз.", "Қажетсіз қозғалтпаңыз."],
+  call:["Ашық сынық, қатты деформация, аяқ-қолдың бозаруы/ұюы – шұғыл жағдай."]},
+ {id:"asthma",e:"🫁",t:"Демікпе (астма ұстамасы)",u:"r",
+  sym:["Дем шығарудың қиындауы, ысқырықты тыныс, кеуде қысылуы, жөтел, сөйлеудің қиындауы"],
+  do:["Отырғызып, тыныштандырыңыз.", "Тар киімді босатыңыз, түтін/шаңнан алыстатыңыз.", "Өзінің тағайындалған жедел ингаляторын қолдануға көмектесіңіз; спейсер болса пайдаланыңыз.", "Жақсармаса немесе сөйлеуге шамасы келмесе 103 шақырыңыз."],
+  dont:["Жатқызбаңыз.", "Басқа адамның дәрісін бермеңіз.", "Ингалятор көмектеспесе жедел көмекті кешіктірмеңіз."],
+  call:["Көгеру, сөйлеу алмау, ұйқышылдық немесе тыныстың әлсіреуі – ауыр ұстама."]},
+ {id:"allergy",e:"🤧",t:"Аллергиялық реакция және анафилаксия",u:"r",
+  sym:["Қышу, есекжем, бөртпе", "ерін/тіл/тамақ ісінуі", "тыныс тарылуы, дауыстың қарлығуы, құсу, бас айналу, естен тану"],
+  do:["Аллерген әсерін тоқтатыңыз, 103/112 шақырыңыз.", "Адреналин автоинжекторы болса, санның сыртқы бөлігіне нұсқаулыққа сай дереу қолданыңыз.", "Тынысы қиындамаса шалқасынан жатқызыңыз; тынысы қиындаса ыңғайлы қалып беріңіз.", "Құсып жатса/есі төмендесе қырына бұрыңыз.", "Белгі сақталса екінші дозаны 5 минуттан кейін қолдану туралы диспетчер нұсқауын орындаңыз."],
+  dont:["Антигистаминді адреналиннің орнына қолданбаңыз.", "Тұрғызбаңыз/жүргізбеңіз.", "Тамақ-сусын бермеңіз.", "Белгі азайса да жедел жәрдемнен бас тартпаңыз."],
+  call:["Анафилаксия – өмірге қауіпті; адреналин бірінші кезектегі көмек."]},
+ {id:"heart",e:"💔",t:"Жүрек талмасы (миокард инфарктісі)",u:"r",
+  sym:["Кеуде қысылуы/жаншылуы, қолға/арқаға/мойынға/жаққа тарайтын ауырсыну, суық тер, ентігу, жүрек айну, әлсіздік"],
+  do:["103/112 шақырыңыз.", "Адамды тыныш, өзіне ыңғайлы жартылай отырған қалыпта ұстаңыз.", "Тағайындалған нитроглицерині болса нұсқауына сай көмектесіңіз.", "Есі анық ересекке аспиринге аллергиясы/қарсы көрсетілімі болмаса 162–325 мг шайнап жұтуға болады; күмән болса диспетчерден сұраңыз.", "Қалыпты тыныс болмаса ЖӨР/AED."],
+  dont:["Жүргізбеңіз.", "Белгісіз жүрек дәрісін бермеңіз.", "Ауырсыну басылар деп күтпеңіз."],
+  call:["Инфаркт күдігі болса дереу жедел жәрдем шақырыңыз."]},
+ {id:"sugar",e:"🍬",t:"Қант диабеті кезіндегі шұғыл жағдайлар",u:"r",
+  sym:["Гипогликемия: діріл, суық тер, ашығу, жүрек қағу, шатасу, құрысу.", "Гипергликемия: шөлдеу, жиі зәр шығару, ауыз құрғауы.", "Кетоацидоз: құсу, іш ауыруы, терең тыныс, жеміс иісі."],
+  do:["Мүмкін болса глюкозаны өлшеңіз.", "Есі анық әрі жұта алса, төмен қантқа күдікте 15–20 г тез сіңетін көмірсу беріңіз; 15 минуттан соң қайта тексеріп, әлі төмен болса қайталаңыз.", "Есінен танса 103/112 шақырып, қырына жатқызыңыз; глюкагон бар әрі қолдануды білсеңіз нұсқаулыққа сай қолданыңыз.", "Кетоацидоз белгілерінде шұғыл көмек."],
+  dont:["Ес-түссіз адамға ауыздан қант/су/тамақ бермеңіз.", "Гипогликемияға күдікте инсулин енгізбеңіз.", "Құрысу кезінде аузына тәтті зат салмаңыз."],
+  call:["Ес бұзылысы, құрысу, құсу немесе терең тыныс – шұғыл жағдай."]},
+ {id:"drown",e:"🌊",t:"Суға кету",u:"r",
+  sym:["Суға бату оқиғасы", "судан шыққан соң жөтел, ентігу, әлсіздік", "ауырында ес-түссіздік және қалыпты тыныстың болмауы"],
+  do:["Өз қауіпсіздігіңізді сақтап, адамды судан қауіпсіз шығарыңыз.", "Есін және тынысын тексеріңіз.", "Қалыпты тыныс болмаса 103/112 шақырып ЖӨР бастаңыз.", "Үйретілген болсаңыз, 2 бастапқы дем беріп, кейін 30 басу/2 дем циклін қолданыңыз.", "AED болса қолданыңыз.", "Тынысы бар адамды қырына жатқызып, жылы ұстаңыз.", "Медициналық тексеру қажет."],
+  dont:["Суды шығару үшін төңкермеңіз немесе ішін баспаңыз.", "ЖӨР-ді кешіктірмеңіз."],
+  call:["Ес-түссіздік немесе тыныс бұзылысы болса дереу жедел көмек."]},
+ {id:"cold",e:"🥶",t:"Тоңу және үсік шалу",u:"y",
+  sym:["Тоңу: қалтырау, сөйлеудің бұзылуы, ұйқышылдық, баяу қимыл. Үсік: тері ағару/көгеру, ұю, қатайып балауыз тәрізді болуы, көпіршік"],
+  do:["Жылы, құрғақ жерге кіргізіңіз.", "Ылғал киімді шешіп, құрғақ киім/көрпемен жабыңыз.", "Дененің орталық бөлігін біртіндеп жылытыңыз.", "Есі анық, жұта алса жылы тәтті сусын беріңіз.", "Қайта үсу қаупі болмаса үсіген жерді 37–39°C суда 20–30 минут жылытыңыз.", "Құрғақ стерильді таңғыш салыңыз.", "Ауыр жағдайда 103/112."],
+  dont:["Қармен ысқыламаңыз.", "Отқа/ыстық суға жақындатпаңыз.", "Көпіршікті жармаңыз.", "Қатты уқаламаңыз.", "Алкоголь бермеңіз."],
+  call:["Ес шатасуы, қатты ұйқышылдық, тоқтаған қалтырау – ауыр гипотермия."]},
+ {id:"head",e:"🤕",t:"Бас жарақаты",u:"r",
+  sym:["Бас ауруы, бас айналу, жүрек айну/құсу, ес шатасуы, естен тану, құрысу, көз қарашығының әртүрлі болуы, құлақ/мұрыннан қан не мөлдір сұйықтық"],
+  do:["Адамды тыныш ұстаңыз; мойын жарақатына күдік болса бас-мойынды қозғалтпаңыз.", "Қан кетсе, бас сүйек сынуына күдік жоқта жараны таңғышпен жабыңыз; күдік болса қатты баспаңыз.", "Тынысы мен есін бақылаңыз.", "Құсу болса мойынды бір сызықта ұстап қырына бұрыңыз.", "Қауіпті белгілерде 103/112."],
+  dont:["Адамды қажетсіз қозғалтпаңыз.", "Кіріп тұрған затты шығармаңыз.", "Алкоголь/ұйықтататын дәрі бермеңіз.", "Жалғыз қалдырмаңыз."],
+  call:["Қайталама құсу, естен тану, құрысу, неврологиялық өзгеріс – шұғыл жағдай."]},
+ {id:"snake",e:"🐍",t:"Жылан шағуы",u:"r",
+  sym:["Тістің ізі, ауырсыну, ісіну, қызару/көгеру, жүрек айну, әлсіздік, бас айналу"],
+  do:["103/112 шақырыңыз.", "Адамды тыныштандырып, қозғалысын шектеңіз.", "Шаққан аяқ-қолды қимылсыз бекітіңіз.", "Сақина/сағатты шешіңіз.", "Шаққан уақытты белгілеңіз.", "Жыланды ұстамаңыз; қауіпсіз қашықтықтан суретке түсіруге болады."],
+  dont:["Жараны кеспеңіз, уды сормаңыз.", "Мұз қоймаңыз.", "Қатты жгут салмаңыз.", "Алкоголь бермеңіз.", "Адамды жүргізбеңіз."],
+  call:["Белгі күтпей медициналық көмекке жүгініңіз."]},
+ {id:"insects",e:"🐝",t:"Улы жәндіктер шағуы",u:"y",
+  sym:["Қызару, ісіну, ауырсыну, қышу", "ауыр аллергияда бет/тіл ісінуі, тыныстың тарылуы, бас айналу"],
+  do:["Қауіпті жерден алыстатыңыз.", "Ара бізгегі көрінсе алып тастаңыз.", "Жерді сабынды сумен жуыңыз, салқын компресс қойыңыз.", "Анафилаксия белгілерінде 103/112 шақырып, адреналин автоинжекторын қолданыңыз."],
+  dont:["Қасып/кеспеңіз, уды сормаңыз, қатты уқаламаңыз.", "Анафилаксияда тек аллергияға қарсы таблеткамен шектелмеңіз."],
+  call:["Ауыз/тамақ маңынан шағу, көп рет шағу немесе анафилаксия – шұғыл жағдай."]},
+ {id:"tick",e:"🪲",t:"Кене жабысуы",u:"g",
+  sym:["Теріге жабысып тұрған кене", "қызару/қышу", "кейін қызба, бас ауруы, әлсіздік немесе ұлғайған қызыл дақ"],
+  do:["Кенені тез алыңыз.", "Жіңішке ұшты пинцетпен теріге жақын тұсынан ұстап, жоғары қарай баяу, бірқалыпты тартыңыз.", "Шаққан жерді сабынды сумен/антисептикпен тазалаңыз.", "Күнін белгілеңіз.", "Қызба, бас ауруы, бөртпе болса дәрігерге көрініңіз; кене энцефалиті қаупі бар аймақта сол күні медициналық ұйымға жүгініңіз."],
+  dont:["Май, бензин, спирт құймаңыз.", "Отпен күйдірмеңіз.", "Жалаң қолмен жаншып езбеңіз.", "Алуын кешіктірмеңіз."],
+  call:["Қызба, бөртпе немесе неврологиялық белгілер пайда болса медициналық көмек."]},
+ {id:"animal",e:"🐕",t:"Ит қабуы",u:"y",
+  sym:["Тістелген/жыртылған жара, қан кету, ісіну, ауырсыну", "кейін қызару, ірің, дене қызуы"],
+  do:["Жараны сабынды ағын сумен кемінде 15 минут жуыңыз.", "Қан кетсе таза дәке арқылы қысым жасаңыз.", "Таза таңғыш салыңыз.", "Сол күні медициналық мекемеге барыңыз: құтыруға қарсы вакцина/иммуноглобулин және сіреспе екпесі қажеттігін дәрігер бағалайды.", "Ит иесі мен вакцина мәліметін анықтаңыз, бірақ көмекті кешіктірмеңіз."],
+  dont:["Жараны өз бетіңізше тігіп/жаппаңыз.", "Күйдірмеңіз.", "Құтыру қаупін елемеңіз.", "Итті бақылауды күтіп дәрігерге баруды кешіктірмеңіз."],
+  call:["Жара кішкентай болса да құтыру профилактикасын бағалау қажет."]},
+ {id:"eye",e:"👁️",t:"Көз жарақаты",u:"y",
+  sym:["Қызару, ауырсыну, жас ағу, көрудің бұлыңғырлануы, бөгде зат, қан немесе тесілген жара"],
+  do:["Шаң/ұсақ бөлшек болса, уқаламай таза сумен шайыңыз.", "Химиялық зат түссе, дереу кемінде 20 минут ағын сумен шайыңыз; линзаны оңай алуға болса шешіңіз.", "Шұғыл медициналық көмекке жүгініңіз.", "Өткір зат кірсе қозғамаңыз, қысым түсірмейтін қатты қалқан қойып, дереу ауруханаға жеткізіңіз."],
+  dont:["Көзді уқаламаңыз.", "Кіріп тұрған затты шығармаңыз.", "Қысым түсіретін таңғыш салмаңыз.", "Тағайындалмаған тамшы қолданбаңыз."],
+  call:["Көрудің төмендеуі, химиялық күйік, тесілген жара – шұғыл жағдай."]},
+ {id:"gas",e:"🏠",t:"Түтіннен және газдан улану",u:"r",
+  sym:["Бас ауруы, бас айналу, жүрек айну, әлсіздік, ұйқышылдық, шатасу, тыныс қиындауы, естен тану. CO иіссіз болуы мүмкін"],
+  do:["Өз қауіпсіздігіңізді сақтап, қорғаныссыз қауіпті ғимаратқа кірмеңіз.", "Адамды қауіпсіз жолмен таза ауаға шығарыңыз.", "103/112 шақырыңыз.", "Есін және тынысын тексеріңіз; қалыпты тыныс болмаса ЖӨР бастаңыз.", "Тынысы бар болса ыңғайлы қалыпта ұстаңыз.", "Көміртек тотығына күдік болса, өзін жақсы сезінсе де ауруханада тексерілуі керек."],
+  dont:["Қауіпті аймаққа қорғаныссыз кірмеңіз.", "Газды иіскеп анықтамаңыз.", "Алкоголь/белгісіз дәрі бермеңіз.", "Жағдайы жақсарды деп медициналық тексеруден бас тартпаңыз."],
+  call:["Бірнеше адамның қатар басы ауырып, әлсіреуі CO улануына күдік тудырады."]},
+ {id:"abcde",e:"🧭",t:"Жалпы ABCDE бағалау",u:"g",
+  sym:[],
+  do:["A – Airway: тыныс жолдарының ашықтығын бағалау.", "B – Breathing: қалыпты тыныс алуын тексеру.", "C – Circulation: қатты қан кетуді анықтау және тоқтату.", "D – Disability: есін, сөйлеуін, құрысу және неврологиялық белгілерді бағалау.", "E – Exposure: қосымша жарақаттарды, күйік пен температура әсерін анықтау."],
+  dont:[],
+  call:["Алдымен өз қауіпсіздігіңізді қамтамасыз етіңіз. Өміріне қауіп төнсе, 103 немесе 112 нөміріне қоңырау шалып, диспетчер нұсқауларын орындаңыз. Қалыпты тыныс болмаса, ЖӨР бастаңыз."]},
+ {id:"dispatch",e:"☎️",t:"Жедел жәрдем шақырғанда не айту керек",u:"r",
+  sym:[],
+  do:["Нақты мекенжай және бағдар.", "Не болғаны және оқиға уақыты.", "Зардап шеккендердің саны және шамамен жасы.", "Адам есін біле ме, қалыпты тыныс ала ма, қатты қан кету бар ма?", "Қандай алғашқы көмек көрсетіліп жатқаны.", "Қоңырау шалушының аты және кері байланыс нөмірі."],
+  dont:["Диспетчер айтпайынша трубканы қоймаңыз."],
+  call:["103 – жедел медициналық жәрдем, 112 – бірыңғай төтенше жағдай қызметі."]},
+ {id:"kit",e:"🧰",t:"Алғашқы көмек қобдишасы",u:"g",
+  sym:[],
+  do:["Стерильді дәке, бинт және жабыспайтын таңғыштар.", "Бір реттік қолғап, медициналық лейкопластырь, қайшы.", "Үшбұрышты орамал және термиялық көрпе.", "Жасанды тыныс беруге арналған қорғаныш маскасы.", "Дайын турникет және қан тоқтатуға арналған таңғыш.", "Кенені алуға арналған жіңішке ұшты пинцет.", "Антисептик, қол тазартқыш, сандық термометр.", "Қолжетімді қоғамдық орындарда автоматты сыртқы дефибриллятор (AED) болғаны жөн."],
+  dont:[],
+  call:[]}
+];
+
+</script>
+<script>
+/* ===== Интерфейс мәтіндері (қаз / рус / eng) ===== */
+var I18N = {
+kk: {
+ appName:'SOS Көмек', themeAria:'Түнгі режим', fontAria:'Қаріпті үлкейту',
+ tapHere:'басыңыз',
+ homeHint:'Басқанда: 1) 112-ге қоңырау, 2) орныңыз жақындарға жіберіледі.',
+ call112:'📞 112-ге қоңырау шалу',
+ panelTitle:'🚨 Көмек шақыру',
+ locFinding:'📍 Орын анықталуда…',
+ locFound:'📍 Орныңыз анықталды (дәлдігі ~{m} м)',
+ viewMap:'Картада көру',
+ locDenied:'Орынға рұқсат берілмеді. Браузер баптауынан рұқсат беріңіз.',
+ locFail:'Орын анықталмады.',
+ locNoSupport:'Бұл құрылғы орынды анықтамайды.',
+ locInsecure:'Орынды анықтау тек HTTPS сілтемесінде жұмыс істейді.',
+ sayAddress:'Мекенжайды дауыспен айтыңыз.',
+ copyLoc:'📋 Орынды көшіру', copied:'Көшірілді', copyFail:'Көшіру мүмкін болмады',
+ callTell:'Қоңырау шалғанда айтыңыз: не болды, қанша адам зардап шекті, мекенжай немесе бағдар.',
+ numbersTitle:'Төтенше нөмірлер',
+ n112:'Бірыңғай құтқару', n103:'Жедел жәрдем', n101:'Өрт сөндіру', n102:'Полиция',
+ disclaimer:'Бұл қосымша дәрігерді алмастырмайды. Қауіпті жағдайда әрқашан алдымен 112/103-ке қоңырау шалыңыз.',
+ addContactsHint:'Жақындарға тікелей жіберу үшін «Менің» бөлімінде сенімді адамдарды қосыңыз.',
+ smsGeneric:'💬 SMS арқылы жіберу', waGeneric:'🟢 WhatsApp арқылы жіберу',
+ smsTo:'SMS', waTo:'WhatsApp',
+ sosMsg:'🆘 Көмек керек! Менің орналасқан жерім: {link} (дәлдігі шамамен {m} м).',
+ sosMsgNoLoc:'🆘 Көмек керек! Орнымды анықтай алмадым.',
+ bloodLbl:'Қан тобы', allergyLbl:'Аллергия',
+ navSOS:'SOS', navGuides:'Нұсқаулық', navCPR:'CPR', navQuiz:'Тест', navMe:'Менің',
+ searchPh:'🔍 Іздеу: жану, қан кету, тұншығу…',
+ chipAll:'Барлығы', chipUrgent:'🔴 Шұғыл', chipImp:'🟡 Маңызды', chipLight:'🟢 Жеңіл',
+ tagR:'Шұғыл', tagY:'Маңызды', tagG:'Жеңіл',
+ noResults:'Ештеңе табылмады.', back:'← Артқа', speak:'🔊 Дауыстап оқу',
+ secSym:'Белгілері', secDo:'Не істеу керек', secDont:'Не істеуге болмайды', secCall:'Қашан 112/103-ке қоңырау шалу керек',
+ guideWarn:'Ақпарат жалпы мақсатта берілген және дәрігер көмегін алмастырмайды.',
+ notTranslated:'Бұл нұсқаулықтың мәтіні әзірге тек қазақ тілінде.',
+ cprTitle:'❤️ Жүрекке массаж ырғағы',
+ cprDesc:'Кеуденің ортасын қатты әрі жылдам басыңыз: минутына 100–120 рет. Дыбыс пен діріл ырғақ береді.',
+ bpmUnit:'/мин', start:'▶ Бастау', stop:'⏹ Тоқтату', cprCallFirst:'📞 Алдымен 112-ге қоңырау шалыңыз',
+ cprStepsTitle:'Қысқаша қадамдар (ересек)',
+ cprSteps:['Қауіпсіздігіңізді тексеріңіз. Адамды қатты шақырып, иығынан сілкіңіз.','Жауап жоқ, тыныс жоқ немесе әдеттегідей емес болса, 112-ге қоңырау шалыңыз (спикерфонмен).','Адамды қатты тегіс жерге шалқасынан жатқызыңыз.','Алақаныңызды кеуде сүйегінің ортасына қойып, қолды түзу ұстап, шамамен 5–6 см тереңдікке басыңыз.','Әр басудан кейін кеуде толық көтерілсін. Жедел жәрдем келгенше немесе адам өзі тыныс алғанша тоқтамаңыз.','Жақын жерде дефибриллятор (AED) болса, әкелуді сұраңыз және аппараттың дауыстық нұсқауын орындаңыз.'],
+ cprNote:'Қолдан тыныс беруді үйренбеген болсаңыз, тек кеудеге массаж жасаңыз.',
+ cprSpeak:'🔊 Қадамдарды дауыстап оқу',
+ ctTitle:'👨‍👩‍👧 Сенімді адамдар',
+ ctDesc:'SOS басылғанда орныңыз осы адамдарға жіберуге дайын болады. Деректер тек осы телефонда сақталады.',
+ ctNone:'Әлі ешкім қосылмаған.', namePh:'Аты (мысалы: Анам)', phonePh:'+7 7XX XXX XX XX',
+ add:'➕ Қосу', ctAdded:'Қосылды', ctMax:'Ең көбі 5 адам', ctInvalid:'Атын және толық нөмірді енгізіңіз', delAria:'Өшіру',
+ medTitle:'🩺 Медициналық карта',
+ medDesc:'Қан тобы, аллергия, тұрақты дәрілер. Көмекшілерге көрсету үшін. Тек осы телефонда сақталады.',
+ bloodPh:'Қан тобы (мысалы: A(II) Rh+)', allergyPh:'Аллергия', medsPh:'Тұрақты қабылдайтын дәрілер',
+ save:'💾 Сақтау', saved:'Сақталды',
+ bkTitle:'💼 Деректі сақтап қою',
+ bkDesc:'Браузер жады тазаланса немесе телефон ауысса, деректер жоғалады. Резервтік көшірмені файл ретінде сақтап қойыңыз, кейін қалпына келтіре аласыз. Деректер серверге жіберілмейді.',
+ bkExport:'⬇ Файл ретінде сақтау', bkCopy:'📋 Мәтін ретінде көшіру',
+ bkImportFile:'⬆ Файлдан қалпына келтіру',
+ bkPastePh:'Көшірілген резервтік мәтінді осында қойыңыз',
+ bkRestore:'♻ Мәтіннен қалпына келтіру',
+ bkDone:'Деректер қалпына келтірілді', bkBad:'Резервтік көшірме оқылмады', bkExported:'Файл сақталды',
+ shareTitle:'📲 Басқаларға бөлісу',
+ shareDesc:'Қосымша тегін. Сілтемені достарыңызға жіберіңіз.', shareBtn:'Сілтемені бөлісу', linkCopied:'Сілтеме көшірілді',
+ noTTS:'Бұл құрылғы дауыспен оқуды қолдамайды',
+ noVoice:'Бұл тілде дауыс жоқ. Телефон баптауынан Google дауыс деректеріне осы тілді қосыңыз.',
+ quizTitle:'📝 Алғашқы көмек тесті',
+ quizIntro:'8 сұрақ. Білімді тексеріп көріңіз: мектепте ОБЖ сабағында да қолдануға болады.',
+ quizStart:'Тестті бастау', quizQ:'Сұрақ {n}/{t}', correct:'✅ Дұрыс!', wrong:'❌ Қате.',
+ next:'Келесі →', result:'Нәтиже: {s}/{t}', again:'Қайта өту', quizBest:'Ең жақсы нәтиже: {b}/{t}',
+ quizFinish:'Нәтижені көру'
+},
+ru: {
+ appName:'SOS Помощь', themeAria:'Тёмный режим', fontAria:'Увеличить шрифт',
+ tapHere:'нажмите',
+ homeHint:'При нажатии: 1) звонок на 112, 2) ваше местоположение отправляется близким.',
+ call112:'📞 Позвонить 112',
+ panelTitle:'🚨 Вызов помощи',
+ locFinding:'📍 Определяем местоположение…',
+ locFound:'📍 Местоположение определено (точность ~{m} м)',
+ viewMap:'Открыть на карте',
+ locDenied:'Нет доступа к местоположению. Разрешите его в настройках браузера.',
+ locFail:'Не удалось определить местоположение.',
+ locNoSupport:'Это устройство не определяет местоположение.',
+ locInsecure:'Определение местоположения работает только по ссылке HTTPS.',
+ sayAddress:'Назовите адрес голосом.',
+ copyLoc:'📋 Скопировать местоположение', copied:'Скопировано', copyFail:'Не удалось скопировать',
+ callTell:'Во время звонка сообщите: что случилось, сколько пострадавших, адрес или ориентир.',
+ numbersTitle:'Экстренные номера',
+ n112:'Единая служба спасения', n103:'Скорая помощь', n101:'Пожарная служба', n102:'Полиция',
+ disclaimer:'Приложение не заменяет врача. В опасной ситуации сначала всегда звоните 112/103.',
+ addContactsHint:'Чтобы отправлять близким напрямую, добавьте доверенных людей в разделе «Профиль».',
+ smsGeneric:'💬 Отправить по SMS', waGeneric:'🟢 Отправить в WhatsApp',
+ smsTo:'SMS', waTo:'WhatsApp',
+ sosMsg:'🆘 Нужна помощь! Моё местоположение: {link} (точность около {m} м).',
+ sosMsgNoLoc:'🆘 Нужна помощь! Не удалось определить моё местоположение.',
+ bloodLbl:'Группа крови', allergyLbl:'Аллергия',
+ navSOS:'SOS', navGuides:'Справка', navCPR:'СЛР', navQuiz:'Тест', navMe:'Профиль',
+ searchPh:'🔍 Поиск: ожог, кровотечение, удушье…',
+ chipAll:'Все', chipUrgent:'🔴 Срочно', chipImp:'🟡 Важно', chipLight:'🟢 Лёгкие',
+ tagR:'Срочно', tagY:'Важно', tagG:'Лёгкий',
+ noResults:'Ничего не найдено.', back:'← Назад', speak:'🔊 Прочитать вслух',
+ secSym:'Признаки', secDo:'Что делать', secDont:'Чего делать нельзя', secCall:'Когда звонить 112/103',
+ guideWarn:'Информация носит общий характер и не заменяет помощь врача.',
+ notTranslated:'Текст этой инструкции пока доступен только на казахском языке.',
+ cprTitle:'❤️ Ритм массажа сердца',
+ cprDesc:'Сильно и быстро давите на центр грудной клетки: 100–120 раз в минуту. Звук и вибрация задают ритм.',
+ bpmUnit:'/мин', start:'▶ Старт', stop:'⏹ Стоп', cprCallFirst:'📞 Сначала позвоните 112',
+ cprStepsTitle:'Краткие шаги (взрослый)',
+ cprSteps:['Убедитесь, что вам ничто не угрожает. Громко позовите человека и потрясите за плечи.','Нет реакции и дыхания или дыхание ненормальное: позвоните 112 (на громкой связи).','Уложите человека на спину на твёрдую ровную поверхность.','Поставьте ладони в центр грудной клетки, держите руки прямыми и надавливайте на глубину около 5–6 см.','После каждого нажатия давайте грудной клетке полностью подняться. Не прекращайте до приезда скорой или пока человек не задышит.','Если рядом есть дефибриллятор (AED), попросите принести его и следуйте голосовым подсказкам.'],
+ cprNote:'Если вы не обучены искусственному дыханию, делайте только массаж груди.',
+ cprSpeak:'🔊 Прочитать шаги вслух',
+ ctTitle:'👨‍👩‍👧 Доверенные люди',
+ ctDesc:'При нажатии SOS ваше местоположение будет готово к отправке этим людям. Данные хранятся только на этом телефоне.',
+ ctNone:'Пока никого нет.', namePh:'Имя (например: Мама)', phonePh:'+7 7XX XXX XX XX',
+ add:'➕ Добавить', ctAdded:'Добавлено', ctMax:'Не более 5 человек', ctInvalid:'Введите имя и полный номер', delAria:'Удалить',
+ medTitle:'🩺 Медицинская карта',
+ medDesc:'Группа крови, аллергия, постоянные лекарства. Чтобы показать помощникам. Хранится только на этом телефоне.',
+ bloodPh:'Группа крови (например: A(II) Rh+)', allergyPh:'Аллергия', medsPh:'Постоянные лекарства',
+ save:'💾 Сохранить', saved:'Сохранено',
+ bkTitle:'💼 Резервная копия',
+ bkDesc:'Если очистить память браузера или сменить телефон, данные пропадут. Сохраните резервную копию в файл, чтобы потом восстановить. Данные не отправляются на сервер.',
+ bkExport:'⬇ Сохранить в файл', bkCopy:'📋 Скопировать как текст',
+ bkImportFile:'⬆ Восстановить из файла',
+ bkPastePh:'Вставьте сюда скопированный текст резервной копии',
+ bkRestore:'♻ Восстановить из текста',
+ bkDone:'Данные восстановлены', bkBad:'Не удалось прочитать резервную копию', bkExported:'Файл сохранён',
+ shareTitle:'📲 Поделиться',
+ shareDesc:'Приложение бесплатное. Отправьте ссылку друзьям.', shareBtn:'Поделиться ссылкой', linkCopied:'Ссылка скопирована',
+ noTTS:'Это устройство не поддерживает озвучивание',
+ noVoice:'Для этого языка нет голоса. Добавьте его в настройках телефона (данные голоса Google).',
+ quizTitle:'📝 Тест по первой помощи',
+ quizIntro:'8 вопросов. Проверьте свои знания: можно использовать и на уроках ОБЖ в школе.',
+ quizStart:'Начать тест', quizQ:'Вопрос {n}/{t}', correct:'✅ Верно!', wrong:'❌ Неверно.',
+ next:'Далее →', result:'Результат: {s}/{t}', again:'Пройти ещё раз', quizBest:'Лучший результат: {b}/{t}',
+ quizFinish:'Показать результат'
+},
+en: {
+ appName:'SOS Help', themeAria:'Dark mode', fontAria:'Larger text',
+ tapHere:'press',
+ homeHint:'When pressed: 1) call 112, 2) your location is sent to your trusted contacts.',
+ call112:'📞 Call 112',
+ panelTitle:'🚨 Call for help',
+ locFinding:'📍 Finding your location…',
+ locFound:'📍 Location found (accuracy ~{m} m)',
+ viewMap:'View on map',
+ locDenied:'Location access was denied. Allow it in your browser settings.',
+ locFail:'Could not find your location.',
+ locNoSupport:'This device cannot detect location.',
+ locInsecure:'Location works only on an HTTPS link.',
+ sayAddress:'Tell the address out loud.',
+ copyLoc:'📋 Copy location', copied:'Copied', copyFail:'Could not copy',
+ callTell:'During the call say: what happened, how many people are hurt, the address or a landmark.',
+ numbersTitle:'Emergency numbers',
+ n112:'Unified rescue', n103:'Ambulance', n101:'Fire service', n102:'Police',
+ disclaimer:'This app does not replace a doctor. In danger, always call 112/103 first.',
+ addContactsHint:'To send directly to close ones, add trusted people in the "Me" tab.',
+ smsGeneric:'💬 Send by SMS', waGeneric:'🟢 Send by WhatsApp',
+ smsTo:'SMS', waTo:'WhatsApp',
+ sosMsg:'🆘 I need help! My location: {link} (accuracy about {m} m).',
+ sosMsgNoLoc:'🆘 I need help! I could not detect my location.',
+ bloodLbl:'Blood type', allergyLbl:'Allergy',
+ navSOS:'SOS', navGuides:'Guides', navCPR:'CPR', navQuiz:'Quiz', navMe:'Me',
+ searchPh:'🔍 Search: burn, bleeding, choking…',
+ chipAll:'All', chipUrgent:'🔴 Urgent', chipImp:'🟡 Important', chipLight:'🟢 Minor',
+ tagR:'Urgent', tagY:'Important', tagG:'Minor',
+ noResults:'Nothing found.', back:'← Back', speak:'🔊 Read aloud',
+ secSym:'Signs', secDo:'What to do', secDont:'What not to do', secCall:'When to call 112/103',
+ guideWarn:'This information is general and does not replace medical help.',
+ notTranslated:'The text of this guide is currently available in Kazakh only.',
+ cprTitle:'❤️ Chest compression rhythm',
+ cprDesc:'Push hard and fast in the centre of the chest: 100–120 times per minute. Sound and vibration keep the rhythm.',
+ bpmUnit:'/min', start:'▶ Start', stop:'⏹ Stop', cprCallFirst:'📞 Call 112 first',
+ cprStepsTitle:'Quick steps (adult)',
+ cprSteps:['Check that the scene is safe. Shout and shake the person by the shoulders.','No response and no breathing, or abnormal breathing: call 112 (on speaker).','Lay the person on their back on a firm, flat surface.','Place your hands in the centre of the chest, keep arms straight and push about 5–6 cm deep.','Let the chest rise fully after each push. Do not stop until help arrives or the person starts breathing.','If an AED is nearby, ask someone to bring it and follow its voice prompts.'],
+ cprNote:'If you are not trained in rescue breaths, do chest compressions only.',
+ cprSpeak:'🔊 Read the steps aloud',
+ ctTitle:'👨‍👩‍👧 Trusted people',
+ ctDesc:'When you press SOS, your location will be ready to send to these people. Data is stored only on this phone.',
+ ctNone:'Nobody added yet.', namePh:'Name (e.g. Mom)', phonePh:'+7 7XX XXX XX XX',
+ add:'➕ Add', ctAdded:'Added', ctMax:'Up to 5 people', ctInvalid:'Enter a name and a full number', delAria:'Delete',
+ medTitle:'🩺 Medical card',
+ medDesc:'Blood type, allergies, regular medicines. To show to helpers. Stored only on this phone.',
+ bloodPh:'Blood type (e.g. A(II) Rh+)', allergyPh:'Allergies', medsPh:'Regular medicines',
+ save:'💾 Save', saved:'Saved',
+ bkTitle:'💼 Backup',
+ bkDesc:'If browser data is cleared or you change phones, your data is lost. Save a backup file so you can restore it later. Data is never sent to a server.',
+ bkExport:'⬇ Save as file', bkCopy:'📋 Copy as text',
+ bkImportFile:'⬆ Restore from file',
+ bkPastePh:'Paste the copied backup text here',
+ bkRestore:'♻ Restore from text',
+ bkDone:'Data restored', bkBad:'Could not read the backup', bkExported:'File saved',
+ shareTitle:'📲 Share',
+ shareDesc:'The app is free. Send the link to your friends.', shareBtn:'Share link', linkCopied:'Link copied',
+ noTTS:'This device does not support reading aloud',
+ noVoice:'No voice for this language. Add it in phone settings (Google voice data).',
+ quizTitle:'📝 First aid quiz',
+ quizIntro:'8 questions. Test your knowledge: it can also be used in school safety lessons.',
+ quizStart:'Start quiz', quizQ:'Question {n}/{t}', correct:'✅ Correct!', wrong:'❌ Wrong.',
+ next:'Next →', result:'Score: {s}/{t}', again:'Try again', quizBest:'Best score: {b}/{t}',
+ quizFinish:'See result'
+}
+};
+
+/* ===== Нұсқаулықтардың аудармасы (қаз тіліндегі мәтін data.js ішінде) =====
+   Жаңа аударма қосу үшін GT.ru.g немесе GT.en.g ішіне жағдайдың id-сімен блок қосыңыз. */
+var GT = {
+ru: {
+ titles:{cpr:'Остановка сердца (СЛР)',bleed:'Сильное кровотечение',burn:'Ожог',choke:'Удушье (инородное тело в дыхательных путях)',stroke:'Инсульт',seizure:'Эпилепсия / судороги',faint:'Обморок',nose:'Носовое кровотечение',poison:'Отравление',shock:'Поражение электрическим током',heat:'Тепловой удар',fracture:'Перелом / вывих',asthma:'Астма / аллергическая реакция',heart:'Сердечный приступ (инфаркт)',sugar:'Диабет: низкий сахар',drown:'Утопление',cold:'Переохлаждение и обморожение',head:'Травма головы',snake:'Укусы змей и ядовитых насекомых',tick:'Присасывание клеща',animal:'Укус собаки',eye:'Травма глаза',gas:'Отравление дымом и газом'},
+ g:{
+  cpr:{sym:['Человек не реагирует','Не дышит или дышит с хрипом, не как обычно'],
+   'do':['Позвоните 112 (на громкой связи).','Положите человека на спину на твёрдую поверхность.','Давите на центр грудной клетки 100–120 раз в минуту на глубину около 5–6 см (ритм есть во вкладке «СЛР»).','Если есть дефибриллятор (AED), используйте его.','Не прекращайте до приезда скорой помощи.'],
+   dont:['Не делайте долгих пауз в нажатиях.','Если не умеете делать искусственное дыхание, делайте только массаж груди.'],
+   call:['Всегда сразу 112/103.']},
+  bleed:{sym:['Кровь не останавливается','Одежда пропитана кровью','Бледность, головокружение'],
+   'do':['Позвоните 112/103.','Сильно прижмите рану чистой тканью или повязкой прямо поверх раны.','Если ткань пропиталась, не снимайте её: положите сверху ещё и продолжайте давить.','Если возможно, поднимите раненую конечность выше уровня сердца.','Уложите человека и укройте, чтобы он не замёрз.','Если при опасном для жизни кровотечении из руки или ноги давление не помогает, наложите жгут и запишите время.'],
+   dont:['Не вытаскивайте глубоко вошедший предмет из раны.','Не снимайте пропитавшуюся кровью ткань.','Не заливайте рану спиртом или йодом.'],
+   call:['Если кровь не останавливается или её много: сразу 112/103.']},
+  choke:{sym:['Не может говорить и кашлять','Хватается за горло','Синеет лицо'],
+   'do':['Если человек сильно кашляет, дайте ему откашляться.','Если не может кашлять: встаньте сзади и сделайте 5 ударов ладонью между лопатками.','Если не помогло: обхватите сзади, поставьте кулак между пупком и грудиной и сделайте 5 резких толчков внутрь и вверх.','Чередуйте 5 ударов и 5 толчков.','Если человек потерял сознание, уложите его, начните СЛР и позвоните 112.'],
+   dont:['Не пытайтесь вслепую доставать предмет пальцем.','Не давайте воду насильно.'],
+   call:['Если предмет не вышел или человек потерял сознание: сразу 112.','Для младенца приёмы другие: сразу позвоните 112 и следуйте указаниям диспетчера.']},
+  stroke:{sym:['Перекос лица (одна сторона опущена)','Одна рука не поднимается или ослабела','Нарушена речь, говорит невнятно','Внезапная сильная головная боль, нарушение зрения или равновесия'],
+   'do':['Сразу позвоните 112/103.','Запомните время начала симптомов и сообщите врачу.','Усадите или уложите человека удобно, голову чуть приподнимите.','Расстегните тесную одежду и оставайтесь рядом.'],
+   dont:['Ничего не давайте есть и пить.','Не давайте лекарства и аспирин по своему усмотрению.','Не ждите, что «само пройдёт».'],
+   call:['Всегда сразу 112/103. Важна каждая минута.']},
+  heart:{sym:['Давящая или жгучая боль в груди дольше 5 минут','Боль отдаёт в левую руку, челюсть, шею или спину','Одышка, холодный пот, тошнота, слабость'],
+   'do':['Сразу позвоните 112/103.','Посадите человека в полусидячее положение и обеспечьте полный покой.','Расстегните тесную одежду.','Если диспетчер разрешит и нет аллергии, можно разжевать и проглотить аспирин.','Если человек без сознания и не дышит, начните СЛР и используйте AED.'],
+   dont:['Не позволяйте человеку ходить и что-то делать.','Не ждите, что боль пройдёт.','Не везите сами на машине, дождитесь скорой.'],
+   call:['Всегда сразу 112/103.']},
+  seizure:{sym:['Припадок эпилепсии: человек внезапно падает, тело сводят судороги','Потеря сознания, возможна пена изо рта'],
+   'do':['Засеките время.','Уберите опасные предметы вокруг, подложите под голову что-нибудь мягкое.','Когда судороги закончатся, переверните человека на бок.','Оставайтесь рядом, пока человек не придёт в себя, говорите спокойно.'],
+   dont:['Не удерживайте человека силой.','Ничего не вкладывайте в рот (ложку, пальцы).','Не давайте воду и еду, пока не придёт в себя.'],
+   call:['Судороги дольше 5 минут.','Первый приступ, повторные приступы, травма, беременность или диабет.','Дыхание не восстанавливается.']},
+  burn:{sym:['Покраснение, отёк, волдыри','Сильная боль'],
+   'do':['Охлаждайте ожог проточной прохладной (не ледяной) водой до 20 минут.','Снимите кольца, браслеты и тесную одежду до появления отёка (если не прилипли).','Закройте чистой мягкой тканью или плёнкой, не туго.'],
+   dont:['Не прикладывайте лёд, масло, сметану, яйцо.','Не прокалывайте волдыри.','Не отрывайте прилипшую одежду.'],
+   call:['Ожог больше ладони, на лице, руках, ногах, в области половых органов, на суставах или глубокий.','Химический или электрический ожог.','Пострадавший ребёнок или пожилой человек.']}
+ }
+},
+en: {
+ titles:{cpr:'Cardiac arrest (CPR)',bleed:'Severe bleeding',burn:'Burns',choke:'Choking',stroke:'Stroke',seizure:'Epilepsy / seizure',faint:'Fainting',nose:'Nosebleed',poison:'Poisoning',shock:'Electric shock',heat:'Heatstroke',fracture:'Fracture / dislocation',asthma:'Asthma / allergic reaction',heart:'Heart attack',sugar:'Diabetes: low blood sugar',drown:'Drowning',cold:'Hypothermia and frostbite',head:'Head injury',snake:'Snake and venomous insect bites',tick:'Tick attached to skin',animal:'Dog bite',eye:'Eye injury',gas:'Smoke and gas poisoning'},
+ g:{
+  cpr:{sym:['The person does not respond','Not breathing, or only gasping abnormally'],
+   'do':['Call 112 (on speaker).','Lay the person on their back on a firm surface.','Push hard in the centre of the chest 100–120 times per minute, about 5–6 cm deep (the CPR tab has a rhythm).','Use an AED if one is available.','Do not stop until help arrives.'],
+   dont:['Do not pause compressions for long.','If you are not trained in rescue breaths, do chest compressions only.'],
+   call:['Always call 112/103 immediately.']},
+  bleed:{sym:['Bleeding does not stop','Clothes soaked with blood','Pale skin, dizziness'],
+   'do':['Call 112/103.','Press firmly and directly on the wound with a clean cloth or bandage.','If the cloth soaks through, do not remove it: add another on top and keep pressing.','If possible, raise the injured limb above heart level.','Lay the person down and keep them warm.','If pressure fails for life-threatening bleeding from an arm or leg, apply a tourniquet and note the time.'],
+   dont:['Do not pull out an object stuck deep in the wound.','Do not remove the blood-soaked cloth.','Do not pour alcohol or iodine into the wound.'],
+   call:['If bleeding does not stop or is heavy: call 112/103 immediately.']},
+  choke:{sym:['Cannot speak or cough','Clutches the throat','Face turns blue'],
+   'do':['If the person coughs strongly, let them keep coughing.','If they cannot cough: stand behind and give 5 firm blows between the shoulder blades with the heel of your hand.','If that fails: wrap your arms around from behind, place a fist between the navel and breastbone and give 5 quick thrusts inward and upward.','Alternate 5 back blows and 5 abdominal thrusts.','If the person becomes unconscious, lay them down, start CPR and call 112.'],
+   dont:['Do not blindly poke a finger into the throat.','Do not force water into the person.'],
+   call:['If the object does not come out or the person passes out: call 112 immediately.','Methods differ for infants: call 112 at once and follow the dispatcher.']},
+  stroke:{sym:['Face droops (one side falls)','One arm cannot be raised or is weak','Speech is slurred or confused','Sudden severe headache, vision or balance problems'],
+   'do':['Call 112/103 immediately.','Note the time symptoms began and tell the doctors.','Sit or lay the person comfortably with the head slightly raised.','Loosen tight clothing and stay with them.'],
+   dont:['Do not give food or drink.','Do not give medicines or aspirin on your own.','Do not wait to see if it "passes".'],
+   call:['Always call 112/103 immediately. Every minute matters.']},
+  heart:{sym:['Pressure, squeezing or burning in the chest for over 5 minutes','Pain spreads to the left arm, jaw, neck or back','Shortness of breath, cold sweat, nausea, weakness'],
+   'do':['Call 112/103 immediately.','Seat the person in a half-sitting position and keep them completely at rest.','Loosen tight clothing.','If the dispatcher allows it and there is no allergy, the person may chew and swallow aspirin.','If the person is unconscious and not breathing, start CPR and use an AED.'],
+   dont:['Do not let the person walk or do anything.','Do not wait for the pain to pass.','Do not drive them yourself: wait for the ambulance.'],
+   call:['Always call 112/103 immediately.']},
+  seizure:{sym:['Epileptic seizure: the person suddenly falls and the body convulses','Loss of consciousness, foam from the mouth is possible'],
+   'do':['Note the time.','Move dangerous objects away and put something soft under the head.','When the seizure ends, roll the person onto their side.','Stay with them until they recover and speak calmly.'],
+   dont:['Do not hold the person down.','Do not put anything in the mouth (spoon, fingers).','Do not give water or food until fully awake.'],
+   call:['Seizure lasts longer than 5 minutes.','First seizure, repeated seizures, injury, pregnancy or diabetes.','Breathing does not return to normal.']},
+  burn:{sym:['Redness, swelling, blisters','Severe pain'],
+   'do':['Cool the burn under running cool (not ice-cold) water for up to 20 minutes.','Remove rings, bracelets and tight clothing before swelling starts (if not stuck).','Cover loosely with a clean soft cloth or cling film.'],
+   dont:['Do not use ice, oil, butter, sour cream or egg.','Do not pop blisters.','Do not tear off clothing stuck to the skin.'],
+   call:['Burn larger than the palm, on the face, hands, feet, genitals, joints or deep burns.','Chemical or electrical burn.','The injured person is a child or an elderly person.']}
+ }
+}
+};
+
+/* ===== Тест сұрақтары ===== */
+var QUIZ = {
+kk:[
+ {q:'Қазақстанда бірыңғай құтқару қызметінің нөмірі қандай?',o:['112','100','120'],a:0,e:'Төтенше жағдайда 112-ге қоңырау шалыңыз.'},
+ {q:'Ересек адамға жүрекке массаж жасағанда ырғақ қандай болуы керек?',o:['Минутына 40–60','Минутына 100–120','Минутына 160–180'],a:1,e:'Кеудені минутына 100–120 рет, шамамен 5–6 см тереңдікке басу керек.'},
+ {q:'Күйікке бірінші не істеу керек?',o:['Май жағу','Күйген жерді ағын салқын сумен салқындату','Мұз қою'],a:1,e:'Күйген жерді 20 минутқа дейін ағын салқын сумен салқындатыңыз. Май мен мұз қолданбаңыз.'},
+ {q:'Ересек адам тұншығып, жөтеле алмаса, не істейсіз?',o:['Су ішкізу','Жауырын арасына 5 рет соғып, кейін іш аймағына басу әдісін қолдану','Өздігінен өтеді деп күту'],a:1,e:'5 соққы мен 5 басуды алма-кезек қайталап, 112-ге қоңырау шалыңыз.'},
+ {q:'Қатты қан кеткенде не істеу керек?',o:['Жараны таза матамен тікелей басу','Жараны спиртпен жуып, күту','Жараға кірген затты суырып алу'],a:0,e:'Жараны таза матамен қатты басып, 112/103-ке қоңырау шалыңыз.'},
+ {q:'Талма (құрысу) кезінде не істеуге болмайды?',o:['Айналадағы қауіпті заттарды алу','Адамның аузына қасық немесе саусақ салу','Құрысу уақытын белгілеу'],a:1,e:'Аузына ештеңе салмаңыз, күшпен ұстамаңыз. Басын қорғап, уақытын белгілеңіз.'},
+ {q:'Адамның беті қисайып, қолы әлсіреп, сөзі бұзылды. Не істейсіз?',o:['Ұйықтап қалуын күту','Дереу 112/103-ке қоңырау шалу','Үйде дәрі беріп күту'],a:1,e:'Бұл инсульт белгілері. Әр минут маңызды, дереу көмек шақырыңыз.'},
+ {q:'Мұрыннан қан кетсе, қалай істеу керек?',o:['Басты артқа шалқайту','Басты алға еңкейтіп, мұрынның жұмсақ бөлігін 10 минут қысу','Мұрынға мақтаны терең тығу'],a:1,e:'Басты алға еңкейтіңіз, мұрынның жұмсақ бөлігін 10 минут тоқтамай қысыңыз.'}
+],
+ru:[
+ {q:'Какой номер единой службы спасения в Казахстане?',o:['112','100','120'],a:0,e:'В экстренной ситуации звоните 112.'},
+ {q:'С каким ритмом нужно делать массаж сердца взрослому?',o:['40–60 в минуту','100–120 в минуту','160–180 в минуту'],a:1,e:'Давите на грудную клетку 100–120 раз в минуту на глубину около 5–6 см.'},
+ {q:'Что нужно сделать в первую очередь при ожоге?',o:['Смазать маслом','Охладить проточной прохладной водой','Приложить лёд'],a:1,e:'Охлаждайте ожог проточной прохладной водой до 20 минут. Масло и лёд не используйте.'},
+ {q:'Взрослый подавился и не может кашлять. Что делать?',o:['Дать воды','5 ударов между лопаток, затем толчки в область живота','Ждать, что пройдёт само'],a:1,e:'Чередуйте 5 ударов и 5 толчков и позвоните 112.'},
+ {q:'Что делать при сильном кровотечении?',o:['Прижать рану чистой тканью','Промыть спиртом и ждать','Вытащить предмет из раны'],a:0,e:'Сильно прижмите рану чистой тканью и позвоните 112/103.'},
+ {q:'Чего нельзя делать при судорогах (припадке)?',o:['Убрать опасные предметы вокруг','Вкладывать ложку или пальцы в рот','Засечь время судорог'],a:1,e:'Ничего не вкладывайте в рот и не удерживайте силой. Защитите голову и засеките время.'},
+ {q:'У человека перекосило лицо, ослабла рука, нарушилась речь. Что делать?',o:['Подождать, пока уснёт','Сразу позвонить 112/103','Дать лекарство и подождать дома'],a:1,e:'Это признаки инсульта. Важна каждая минута: сразу вызывайте помощь.'},
+ {q:'Как действовать при носовом кровотечении?',o:['Запрокинуть голову назад','Наклонить голову вперёд и зажать мягкую часть носа на 10 минут','Глубоко засунуть вату в нос'],a:1,e:'Наклоните голову вперёд и без перерыва зажимайте мягкую часть носа 10 минут.'}
+],
+en:[
+ {q:'What is the unified rescue number in Kazakhstan?',o:['112','100','120'],a:0,e:'In an emergency call 112.'},
+ {q:'What rhythm should chest compressions have for an adult?',o:['40–60 per minute','100–120 per minute','160–180 per minute'],a:1,e:'Push 100–120 times per minute, about 5–6 cm deep.'},
+ {q:'What is the first thing to do for a burn?',o:['Apply oil','Cool it under running cool water','Apply ice'],a:1,e:'Cool the burn under running cool water for up to 20 minutes. Do not use oil or ice.'},
+ {q:'An adult is choking and cannot cough. What do you do?',o:['Give water','5 back blows, then abdominal thrusts','Wait for it to pass'],a:1,e:'Alternate 5 blows and 5 thrusts and call 112.'},
+ {q:'What should you do for severe bleeding?',o:['Press directly on the wound with a clean cloth','Wash with alcohol and wait','Pull out the object in the wound'],a:0,e:'Press firmly with a clean cloth and call 112/103.'},
+ {q:'What must you NOT do during a seizure?',o:['Remove dangerous objects nearby','Put a spoon or fingers in the mouth','Note how long it lasts'],a:1,e:'Never put anything in the mouth or hold the person down. Protect the head and note the time.'},
+ {q:'A person has a drooping face, a weak arm and slurred speech. What do you do?',o:['Wait for them to fall asleep','Call 112/103 immediately','Give medicine and wait at home'],a:1,e:'These are stroke signs. Every minute matters: call for help at once.'},
+ {q:'What do you do for a nosebleed?',o:['Tilt the head back','Lean forward and pinch the soft part of the nose for 10 minutes','Push cotton deep into the nose'],a:1,e:'Lean forward and pinch the soft part of the nose without stopping for 10 minutes.'}
+]
+};
+
+</script>
+<script>
+/* ===== Ескі браузерлерге арналған қосымшалар (polyfill) ===== */
+if (!Array.prototype.find) {
+  Array.prototype.find = function (f) {
+    for (var i = 0; i < this.length; i++) { if (f(this[i], i, this)) return this[i]; }
+    return undefined;
+  };
+}
+if (!String.prototype.includes) {
+  String.prototype.includes = function (s, p) { return this.indexOf(s, p || 0) !== -1; };
+}
+
+function $(s) { return document.querySelector(s); }
+function $$(s) { return Array.prototype.slice.call(document.querySelectorAll(s)); }
+var store = {
+  get: function (k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+var ESCMAP = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'};
+function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return ESCMAP[c]; }); }
+function trim(s) { return String(s).replace(/^\s+|\s+$/g, ''); }
+
+/* ===== Тіл ===== */
+var LANGS = ['kk', 'ru', 'en'];
+var VOICE_LANG = {kk: 'kk-KZ', ru: 'ru-RU', en: 'en-US'};
+var lang = store.get('lang', 'kk');
+if (LANGS.indexOf(lang) < 0) lang = 'kk';
+function t(k, vars) {
+  var s = (I18N[lang] && I18N[lang][k] != null) ? I18N[lang][k] : I18N.kk[k];
+  if (typeof s === 'string' && vars) {
+    for (var p in vars) { if (vars.hasOwnProperty(p)) s = s.split('{' + p + '}').join(vars[p]); }
+  }
+  return s;
+}
+var URGKEY = {r: 'tagR', y: 'tagY', g: 'tagG'};
+var URGCLS = {r: 'u-r', y: 'u-y', g: 'u-g'};
+
+var toastTimer = null;
+function toast(m) {
+  var el = $('#toast'); el.textContent = m; el.style.display = 'block';
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function () { el.style.display = 'none'; }, 3200);
+}
+
+function applyStatic() {
+  document.documentElement.lang = lang;
+  $$('[data-i18n]').forEach(function (el) { el.textContent = t(el.getAttribute('data-i18n')); });
+  $$('[data-i18n-ph]').forEach(function (el) { el.setAttribute('placeholder', t(el.getAttribute('data-i18n-ph'))); });
+  $$('[data-i18n-aria]').forEach(function (el) { el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria'))); });
+  document.title = t('appName');
+  $('#lang').value = lang;
+  $('#btnMetro').textContent = metroTimer ? t('stop') : t('start');
+  $('#cprSteps').innerHTML = t('cprSteps').map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('');
+}
+
+/* ===== Навигация ===== */
+var currentScreen = 'home';
+function go(name) {
+  currentScreen = name;
+  $$('.screen').forEach(function (s) { s.classList.remove('active'); });
+  $('#s-' + name).classList.add('active');
+  $$('nav button').forEach(function (b) {
+    var g = b.getAttribute('data-go');
+    var on = g === name || (name === 'detail' && g === 'guides');
+    if (on) { b.classList.add('active'); } else { b.classList.remove('active'); }
+  });
+  window.scrollTo(0, 0);
+  if (name !== 'cpr') stopMetro();
+  stopSpeech();
+}
+$$('nav button').forEach(function (b) { b.onclick = function () { go(b.getAttribute('data-go')); }; });
+$('#btnBack').onclick = function () { go('guides'); };
+
+/* ===== Тақырып / қаріп ===== */
+var root = document.documentElement;
+function applyPrefs() {
+  root.setAttribute('data-theme', store.get('theme', 'light'));
+  root.style.fontSize = store.get('fs', 16) + 'px';
+}
+$('#btnTheme').onclick = function () { store.set('theme', store.get('theme', 'light') === 'dark' ? 'light' : 'dark'); applyPrefs(); };
+$('#btnFont').onclick = function () { var f = store.get('fs', 16); store.set('fs', f >= 22 ? 16 : f + 3); applyPrefs(); };
+
+/* ===== Нұсқаулық тізімі ===== */
+function guideView(g) {
+  var title = g.t, body = g, translated = true;
+  if (lang !== 'kk') {
+    var tr = GT[lang];
+    if (tr && tr.titles[g.id]) title = tr.titles[g.id];
+    if (tr && tr.g[g.id]) { body = tr.g[g.id]; } else { translated = false; }
+  }
+  return {id: g.id, e: g.e, u: g.u, t: title, sym: body.sym, 'do': body['do'], dont: body.dont, call: body.call, translated: translated};
+}
+var filter = 'all';
+function renderChips() {
+  var opts = [['all', 'chipAll'], ['r', 'chipUrgent'], ['y', 'chipImp'], ['g', 'chipLight']];
+  $('#chips').innerHTML = opts.map(function (o) {
+    return '<button class="chip' + (filter === o[0] ? ' on' : '') + '" data-f="' + o[0] + '">' + esc(t(o[1])) + '</button>';
+  }).join('');
+  $$('#chips .chip').forEach(function (c) {
+    c.onclick = function () { filter = c.getAttribute('data-f'); renderChips(); renderList(); };
+  });
+}
+function renderList() {
+  var q = trim($('#q').value).toLowerCase();
+  var items = GUIDES.map(guideView).filter(function (g) {
+    return (filter === 'all' || g.u === filter) &&
+      (!q || g.t.toLowerCase().indexOf(q) !== -1 || g.sym.join(' ').toLowerCase().indexOf(q) !== -1);
+  });
+  $('#list').innerHTML = items.length ? items.map(function (g) {
+    return '<button class="item" data-id="' + g.id + '"><span class="e">' + g.e + '</span><span class="t">' +
+      esc(g.t) + '</span><span class="tag ' + URGCLS[g.u] + '">' + esc(t(URGKEY[g.u])) + '</span></button>';
+  }).join('') : '<p class="muted">' + esc(t('noResults')) + '</p>';
+  $$('#list .item').forEach(function (b) { b.onclick = function () { openGuide(b.getAttribute('data-id')); }; });
+}
+$('#q').oninput = renderList;
+
+function sec(cls, title, arr, ordered) {
+  if (!arr || !arr.length) return '';
+  var tag = ordered ? 'ol' : 'ul';
+  return '<div class="sec ' + cls + '"><h3>' + esc(title) + '</h3><' + tag + '>' +
+    arr.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</' + tag + '></div>';
+}
+var currentGuide = null;
+function openGuide(id) {
+  var raw = GUIDES.find(function (x) { return x.id === id; });
+  var g = guideView(raw);
+  currentGuide = g;
+  $('#detail').innerHTML =
+    '<h2 style="margin:0 0 4px">' + g.e + ' ' + esc(g.t) + ' <span class="tag ' + URGCLS[g.u] + '">' + esc(t(URGKEY[g.u])) + '</span></h2>' +
+    '<a class="btn red" href="tel:112">' + esc(t('call112')) + '</a>' +
+    '<button class="btn gray" id="btnSpeak">' + esc(t('speak')) + '</button>' +
+    (g.translated ? '' : '<div class="notr">' + esc(t('notTranslated')) + '</div>') +
+    sec('sym', t('secSym'), g.sym, false) +
+    sec('do', t('secDo'), g['do'], true) +
+    sec('dont', t('secDont'), g.dont, false) +
+    sec('call', t('secCall'), g.call, false) +
+    '<p class="warn">' + esc(t('guideWarn')) + '</p>';
+  $('#btnSpeak').onclick = speakGuide;
+  go('detail');
+}
+
+/* ===== Дауыспен оқу ===== */
+function stopSpeech() { try { if ('speechSynthesis' in window) speechSynthesis.cancel(); } catch (e) {} }
+function speakText(text, forceLang) {
+  if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') { toast(t('noTTS')); return; }
+  if (speechSynthesis.speaking) { speechSynthesis.cancel(); return; }
+  var code = VOICE_LANG[forceLang || lang];
+  var prefix = code.split('-')[0];
+  var voices = speechSynthesis.getVoices();
+  var match = voices.find(function (v) { return v.lang && v.lang.toLowerCase().indexOf(prefix) === 0; });
+  if (voices.length && !match) { toast(t('noVoice')); return; }
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = code;
+  if (match) { u.voice = match; u.lang = match.lang; }
+  speechSynthesis.speak(u);
+}
+function speakGuide() {
+  var g = currentGuide;
+  var text = g.t + '. ' + t('secDo') + '. ' + g['do'].map(function (x, i) { return (i + 1) + '. ' + x; }).join(' ') +
+    ' ' + t('secDont') + '. ' + (g.dont || []).join(' ');
+  speakText(text, g.translated ? lang : 'kk');
+}
+$('#btnCprSpeak').onclick = function () {
+  speakText(t('cprTitle').replace(/^[^\wА-Яа-яӘәҒғҚқҢңӨөҰұҮүІіҺһ]+/, '') + '. ' + t('cprSteps').join(' '));
+};
+if ('speechSynthesis' in window) { try { speechSynthesis.getVoices(); } catch (e) {} }
+
+/* ===== Орын және SOS ===== */
+var lastLoc = null;
+var locState = {kind: 'idle'};
+function mapLink() {
+  var c = lastLoc.coords;
+  return 'https://maps.google.com/?q=' + c.latitude.toFixed(6) + ',' + c.longitude.toFixed(6);
+}
+function locText() {
+  if (!lastLoc) return t('sosMsgNoLoc');
+  var med = store.get('med', {});
+  var parts = [];
+  if (med.blood) parts.push(t('bloodLbl') + ': ' + med.blood);
+  if (med.allergy) parts.push(t('allergyLbl') + ': ' + med.allergy);
+  return t('sosMsg', {link: mapLink(), m: Math.round(lastLoc.coords.accuracy)}) + (parts.length ? ' ' + parts.join('. ') + '.' : '');
+}
+function buildSendButtons() {
+  var cs = store.get('contacts', []);
+  var msg = encodeURIComponent(locText());
+  var html = '';
+  if (!cs.length) {
+    html += '<p class="muted">' + esc(t('addContactsHint')) + '</p>';
+    html += '<a class="btn green" href="sms:?&body=' + msg + '">' + esc(t('smsGeneric')) + '</a>';
+    html += '<a class="btn" style="background:#128c7e" href="https://wa.me/?text=' + msg + '" target="_blank" rel="noopener">' + esc(t('waGeneric')) + '</a>';
+  } else {
+    cs.forEach(function (c) {
+      var ph = c.phone.replace(/[^\d+]/g, '');
+      var wa = ph.replace(/\D/g, '');
+      html += '<a class="btn green" href="sms:' + ph + '?&body=' + msg + '">💬 ' + esc(c.name) + ': ' + esc(t('smsTo')) + '</a>';
+      html += '<a class="btn" style="background:#128c7e" href="https://wa.me/' + wa + '?text=' + msg + '" target="_blank" rel="noopener">🟢 ' + esc(c.name) + ': ' + esc(t('waTo')) + '</a>';
+    });
+  }
+  $('#sendBox').innerHTML = html;
+}
+function renderLoc() {
+  var el = $('#locStatus');
+  if (locState.kind === 'finding') { el.textContent = t('locFinding'); return; }
+  if (locState.kind === 'ok') {
+    var c = lastLoc.coords;
+    el.innerHTML = esc(t('locFound', {m: Math.round(c.accuracy)})) + '<br><a href="' + mapLink() + '" target="_blank" rel="noopener">' + esc(t('viewMap')) + '</a>';
+  } else if (locState.kind === 'err') {
+    el.textContent = '⚠️ ' + t(locState.key) + ' ' + t('sayAddress');
+  } else { el.textContent = ''; }
+  if (locState.kind === 'ok' || locState.kind === 'err') buildSendButtons();
+}
+function getLocation() {
+  locState = {kind: 'finding'}; renderLoc();
+  if (window.isSecureContext === false) { locState = {kind: 'err', key: 'locInsecure'}; renderLoc(); return; }
+  if (!navigator.geolocation) { locState = {kind: 'err', key: 'locNoSupport'}; renderLoc(); return; }
+  navigator.geolocation.getCurrentPosition(function (pos) {
+    lastLoc = pos; locState = {kind: 'ok'}; renderLoc();
+  }, function (err) {
+    locState = {kind: 'err', key: err.code === 1 ? 'locDenied' : 'locFail'}; renderLoc();
+  }, {enableHighAccuracy: true, timeout: 12000, maximumAge: 0});
+}
+$('#btnSOS').onclick = function () {
+  if (navigator.vibrate) navigator.vibrate(200);
+  var p = $('#panelSOS');
+  p.style.display = 'block';
+  buildSendButtons();
+  try { p.scrollIntoView({behavior: 'smooth'}); } catch (e) { p.scrollIntoView(); }
+  getLocation();
+};
+function copyText(text, done, fail) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function () { legacyCopy(text, done, fail); });
+    return;
+  }
+  legacyCopy(text, done, fail);
+}
+function legacyCopy(text, done, fail) {
+  try {
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    var ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    if (ok) { done(); } else { fail(); }
+  } catch (e) { fail(); }
+}
+$('#btnCopyLoc').onclick = function () {
+  copyText(locText(), function () { toast(t('copied')); }, function () { toast(t('copyFail')); });
+};
+
+/* ===== Жақындар және мед.карта ===== */
+function renderContacts() {
+  var cs = store.get('contacts', []);
+  $('#contactList').innerHTML = cs.length ? cs.map(function (c, i) {
+    return '<div class="contact"><span><b>' + esc(c.name) + '</b><br><span class="muted">' + esc(c.phone) + '</span></span><button data-i="' + i + '" aria-label="' + esc(t('delAria')) + '">🗑</button></div>';
+  }).join('') : '<p class="muted">' + esc(t('ctNone')) + '</p>';
+  $$('#contactList button').forEach(function (b) {
+    b.onclick = function () {
+      var a = store.get('contacts', []);
+      a.splice(parseInt(b.getAttribute('data-i'), 10), 1);
+      store.set('contacts', a); renderContacts(); buildSendButtons();
+    };
+  });
+}
+$('#btnAddContact').onclick = function () {
+  var name = trim($('#cName').value), phone = trim($('#cPhone').value);
+  if (!name || phone.replace(/\D/g, '').length < 10) { toast(t('ctInvalid')); return; }
+  var a = store.get('contacts', []);
+  if (a.length >= 5) { toast(t('ctMax')); return; }
+  a.push({name: name, phone: phone}); store.set('contacts', a);
+  $('#cName').value = ''; $('#cPhone').value = ''; renderContacts(); toast(t('ctAdded'));
+};
+function loadMed() {
+  var m = store.get('med', {});
+  $('#mBlood').value = m.blood || ''; $('#mAllergy').value = m.allergy || ''; $('#mMeds').value = m.meds || '';
+}
+$('#btnSaveMed').onclick = function () {
+  store.set('med', {blood: trim($('#mBlood').value), allergy: trim($('#mAllergy').value), meds: trim($('#mMeds').value)});
+  toast(t('saved'));
+};
+
+/* ===== Резервтік көшірме ===== */
+function backupJSON() {
+  return JSON.stringify({app: 'sos-komek', v: 1, contacts: store.get('contacts', []), med: store.get('med', {})});
+}
+function applyBackup(text) {
+  try {
+    var d = JSON.parse(trim(text));
+    if (!d || d.app !== 'sos-komek') throw new Error('bad');
+    var cs = [];
+    (d.contacts || []).slice(0, 5).forEach(function (c) {
+      if (c && typeof c.name === 'string' && typeof c.phone === 'string') cs.push({name: c.name.slice(0, 60), phone: c.phone.slice(0, 30)});
+    });
+    var m = d.med || {};
+    store.set('contacts', cs);
+    store.set('med', {blood: String(m.blood || '').slice(0, 60), allergy: String(m.allergy || '').slice(0, 120), meds: String(m.meds || '').slice(0, 200)});
+    renderContacts(); loadMed(); toast(t('bkDone'));
+  } catch (e) { toast(t('bkBad')); }
+}
+$('#btnExport').onclick = function () {
+  try {
+    var blob = new Blob([backupJSON()], {type: 'application/json'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = 'sos-komek-backup.json';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    toast(t('bkExported'));
+  } catch (e) { toast(t('copyFail')); }
+};
+$('#btnBackupCopy').onclick = function () {
+  copyText(backupJSON(), function () { toast(t('copied')); }, function () { $('#backupText').value = backupJSON(); toast(t('copyFail')); });
+};
+$('#fileImport').onchange = function () {
+  var f = this.files && this.files[0];
+  if (!f) return;
+  var r = new FileReader();
+  r.onload = function () { applyBackup(String(r.result)); };
+  r.onerror = function () { toast(t('bkBad')); };
+  r.readAsText(f);
+  this.value = '';
+};
+$('#btnRestore').onclick = function () { applyBackup($('#backupText').value); $('#backupText').value = ''; };
+
+$('#btnShare').onclick = function () {
+  if (navigator.share) {
+    try { navigator.share({title: t('appName'), text: t('shareDesc'), url: location.href}); } catch (e) {}
+  } else {
+    copyText(location.href, function () { toast(t('linkCopied')); }, function () { toast(location.href); });
+  }
+};
+
+/* ===== CPR метроном ===== */
+var metroTimer = null, actx = null;
+function beep() {
+  try {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    actx = actx || new AC();
+    var o = actx.createOscillator(), g = actx.createGain();
+    o.frequency.value = 880; g.gain.value = 0.25; o.connect(g); g.connect(actx.destination);
+    o.start(0); o.stop(actx.currentTime + 0.06);
+  } catch (e) {}
+}
+function tick() {
+  beep(); if (navigator.vibrate) navigator.vibrate(40);
+  var b = $('#beat'); b.classList.add('on');
+  setTimeout(function () { b.classList.remove('on'); }, 90);
+}
+function startMetro() {
+  var bpm = parseInt($('#bpmRange').value, 10);
+  tick(); metroTimer = setInterval(tick, 60000 / bpm);
+  $('#btnMetro').textContent = t('stop');
+}
+function stopMetro() {
+  if (metroTimer) { clearInterval(metroTimer); metroTimer = null; }
+  var b = $('#btnMetro'); if (b) b.textContent = t('start');
+}
+$('#btnMetro').onclick = function () { if (metroTimer) { stopMetro(); } else { startMetro(); } };
+$('#bpmRange').oninput = function () {
+  $('#bpm').textContent = this.value;
+  if (metroTimer) { stopMetro(); startMetro(); }
+};
+
+/* ===== Тест ===== */
+var quiz = {i: 0, score: 0, answered: false, started: false, done: false};
+function renderQuiz() {
+  var qs = QUIZ[lang] || QUIZ.kk, box = $('#quizBox'), total = qs.length;
+  var best = store.get('quizBest', null);
+  var bestLine = best !== null ? '<p class="muted">' + esc(t('quizBest', {b: best, t: total})) + '</p>' : '';
+  if (!quiz.started) {
+    box.innerHTML = '<h2>' + esc(t('quizTitle')) + '</h2><p class="muted">' + esc(t('quizIntro')) + '</p>' + bestLine +
+      '<button class="btn green" id="qStart">' + esc(t('quizStart')) + '</button>';
+    $('#qStart').onclick = function () { quiz = {i: 0, score: 0, answered: false, started: true, done: false}; renderQuiz(); };
+    return;
+  }
+  if (quiz.done) {
+    box.innerHTML = '<h2>' + esc(t('quizTitle')) + '</h2><div class="qscore">' + esc(t('result', {s: quiz.score, t: total})) + '</div>' + bestLine +
+      '<button class="btn green" id="qAgain">' + esc(t('again')) + '</button>';
+    $('#qAgain').onclick = function () { quiz = {i: 0, score: 0, answered: false, started: true, done: false}; renderQuiz(); };
+    return;
+  }
+  var q = qs[quiz.i];
+  var html = '<div class="qprog">' + esc(t('quizQ', {n: quiz.i + 1, t: total})) + '</div><div class="qtext">' + esc(q.q) + '</div>';
+  q.o.forEach(function (o, idx) {
+    var cls = 'opt';
+    if (quiz.answered) { if (idx === q.a) cls += ' ok'; else if (idx === quiz.picked) cls += ' no'; }
+    html += '<button class="' + cls + '" data-i="' + idx + '">' + esc(o) + '</button>';
+  });
+  if (quiz.answered) {
+    html += '<div class="qexp"><b>' + esc(quiz.picked === q.a ? t('correct') : t('wrong')) + '</b> ' + esc(q.e) + '</div>';
+    html += '<button class="btn" id="qNext">' + esc(quiz.i + 1 >= total ? t('quizFinish') : t('next')) + '</button>';
+  }
+  box.innerHTML = html;
+  if (!quiz.answered) {
+    $$('#quizBox .opt').forEach(function (b) {
+      b.onclick = function () {
+        quiz.picked = parseInt(b.getAttribute('data-i'), 10);
+        quiz.answered = true;
+        if (quiz.picked === q.a) quiz.score++;
+        renderQuiz();
+      };
+    });
+  } else {
+    $('#qNext').onclick = function () {
+      quiz.answered = false; quiz.i++;
+      if (quiz.i >= total) {
+        quiz.done = true;
+        var b = store.get('quizBest', null);
+        if (b === null || quiz.score > b) store.set('quizBest', quiz.score);
+      }
+      renderQuiz();
+    };
+  }
+}
+
+/* ===== Тіл ауыстыру ===== */
+function renderAll() {
+  applyStatic(); renderChips(); renderList(); renderContacts(); renderQuiz(); renderLoc();
+  if ($('#panelSOS').style.display === 'block') buildSendButtons();
+  if (currentScreen === 'detail' && currentGuide) openGuide(currentGuide.id);
+}
+$('#lang').onchange = function () {
+  lang = this.value; store.set('lang', lang); stopSpeech(); renderAll();
+};
+
+/* ===== Іске қосу ===== */
+applyPrefs();
+loadMed();
+renderAll();
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').then(null, function () {}); });
+}
+
+</script>
+</body>
+</html>
